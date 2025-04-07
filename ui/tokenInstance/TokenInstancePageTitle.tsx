@@ -53,7 +53,7 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
     };
   }, [ appProps.referrer, hash ]);
 
-  const tokenTag = token ? <Tag loading={ isLoading }>{ getTokenTypeName(token.type) }</Tag> : null;
+  const tokenTag = token ? <Tag loading={ isLoading }>{ getTokenTypeName(token) }</Tag> : null;
 
   const appLink = (() => {
     if (!instance?.external_app_url) {

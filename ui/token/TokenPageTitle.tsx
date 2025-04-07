@@ -74,7 +74,7 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, hash }: Props) => {
     return [
       tokenQuery.data ? {
         slug: tokenQuery.data?.type,
-        name: getTokenTypeName(tokenQuery.data.type),
+        name: getTokenTypeName(tokenQuery.data),
         tagType: 'custom' as const,
         ordinal: PREDEFINED_TAG_PRIORITY,
       } : undefined,
