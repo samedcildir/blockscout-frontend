@@ -98,7 +98,7 @@ const TokensTableItem = ({
               />
             </Flex>
             <Flex columnGap={ 1 }>
-              <Tag isLoading={ isLoading }>{ getTokenTypeName(type) }</Tag>
+              <Tag isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
               { bridgedChainTag && <Tag isLoading={ isLoading }>{ bridgedChainTag }</Tag> }
             </Flex>
           </Flex>

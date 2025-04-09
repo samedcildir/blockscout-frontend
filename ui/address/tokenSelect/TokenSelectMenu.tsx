@@ -6,7 +6,6 @@ import React from 'react';
 import type { FormattedData } from './types';
 import type { TokenType } from 'types/api/token';
 
-import { getTokenTypeName } from 'lib/token/tokenTypes';
 import IconSvg from 'ui/shared/IconSvg';
 
 import type { Sort } from '../utils/tokenUtils';
@@ -75,10 +74,10 @@ const TokenSelectMenu = ({ erc20sort, erc1155sort, erc404sort, filteredData, onI
             <Box key={ type }>
               <Flex justifyContent="space-between">
                 <Text mb={ 3 } color="gray.500" fontWeight={ 600 } fontSize="sm">
-                  { getTokenTypeName(type) } tokens ({ numPrefix }{ tokenInfo.items.length })
+                  { type == 'ERC-20' ? 'WRAPPED BRC-20 and ERC-20' : type } tokens ({ numPrefix }{ tokenInfo.items.length })
                 </Text>
                 { hasSort && (
-                  <Link data-type={ type } onClick={ onSortClick } aria-label={ `Sort ${ getTokenTypeName(type) } tokens` }>
+                  <Link data-type={ type } onClick={ onSortClick } aria-label={ `Sort ${ type == 'ERC-20' ? 'WRAPPED BRC-20 and ERC-20' : type } tokens` }>
                     <IconSvg name="arrows/east" boxSize={ 5 } transform={ arrowTransform } transitionDuration="faster"/>
                   </Link>
                 ) }

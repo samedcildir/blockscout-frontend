@@ -58,7 +58,7 @@ const TokenTransferListItem = ({
                 noCopy
                 w="auto"
               />
-              <Tag flexShrink={ 0 } isLoading={ isLoading }>{ getTokenTypeName(token.type) }</Tag>
+              <Tag flexShrink={ 0 } isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
             </>
           ) }
           <Tag colorScheme="orange" isLoading={ isLoading }>{ getTokenTransferTypeText(type) }</Tag>

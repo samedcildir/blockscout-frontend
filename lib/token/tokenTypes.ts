@@ -1,4 +1,4 @@
-import type { NFTTokenType, TokenType } from 'types/api/token';
+import type { NFTTokenType, TokenType, TokenInfo } from 'types/api/token';
 
 import config from 'configs/app';
 
@@ -18,6 +18,11 @@ export const TOKEN_TYPES: Record<TokenType, string > = {
 export const NFT_TOKEN_TYPE_IDS: Array<NFTTokenType> = [ 'ERC-721', 'ERC-1155', 'ERC-404' ];
 export const TOKEN_TYPE_IDS: Array<TokenType> = [ 'ERC-20', ...NFT_TOKEN_TYPE_IDS ];
 
-export function getTokenTypeName(typeId: TokenType) {
+export function getTokenTypeName(tokenQueryResult: TokenInfo) {
+  const typeId = tokenQueryResult.type;
+  const iconUrl = tokenQueryResult.icon_url;
+  if (iconUrl != null) {
+    return 'WRAPPED BRC-20';
+  }
   return TOKEN_TYPES[typeId];
 }

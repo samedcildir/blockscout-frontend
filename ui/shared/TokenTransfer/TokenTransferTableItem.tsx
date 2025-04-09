@@ -64,7 +64,7 @@ const TokenTransferTableItem = ({
               mt={ 1 }
             />
             <Flex columnGap={ 2 } rowGap={ 2 } mt={ 2 } flexWrap="wrap">
-              <Tag isLoading={ isLoading }>{ getTokenTypeName(token.type) }</Tag>
+              <Tag isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
               <Tag colorScheme="orange" isLoading={ isLoading }>{ getTokenTransferTypeText(type) }</Tag>
             </Flex>
           </>
