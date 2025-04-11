@@ -26,12 +26,6 @@ export default function useNavItems(): ReturnType {
   return React.useMemo(() => {
     let blockchainNavItems: Array<NavItem> | Array<Array<NavItem>> = [];
 
-    const topAccounts: NavItem | null = !config.UI.views.address.hiddenViews?.top_accounts ? {
-      text: 'Top accounts',
-      nextRoute: { pathname: '/accounts' as const },
-      icon: 'top-accounts',
-      isActive: pathname === '/accounts',
-    } : null;
     const blocks: NavItem | null = {
       text: 'Blocks',
       nextRoute: { pathname: '/blocks' as const },
@@ -43,12 +37,6 @@ export default function useNavItems(): ReturnType {
       nextRoute: { pathname: '/txs' as const },
       icon: 'transactions',
       isActive: pathname === '/txs' || pathname === '/tx/[hash]',
-    };
-    const internalTxs: NavItem | null = {
-      text: 'Internal transactions',
-      nextRoute: { pathname: '/internal-txs' as const },
-      icon: 'internal_txns',
-      isActive: pathname === '/internal-txs',
     };
     const userOps: NavItem | null = config.features.userOps.isEnabled ? {
       text: 'User operations',
@@ -131,7 +119,6 @@ export default function useNavItems(): ReturnType {
       blockchainNavItems = [
         [
           txs,
-          internalTxs,
           rollupDeposits,
           rollupWithdrawals,
           rollupInteropMessages,
@@ -144,7 +131,6 @@ export default function useNavItems(): ReturnType {
         ].filter(Boolean),
         [
           userOps,
-          topAccounts,
           mudWorlds,
           validators,
           verifiedContracts,
@@ -155,14 +141,12 @@ export default function useNavItems(): ReturnType {
       blockchainNavItems = [
         [
           txs,
-          internalTxs,
           rollupDeposits,
           rollupWithdrawals,
         ],
         [
           blocks,
           userOps,
-          topAccounts,
           verifiedContracts,
           ensLookup,
         ].filter(Boolean),
@@ -171,13 +155,11 @@ export default function useNavItems(): ReturnType {
       blockchainNavItems = [
         [
           txs,
-          internalTxs,
           userOps,
           blocks,
           rollupTxnBatches,
         ].filter(Boolean),
         [
-          topAccounts,
           validators,
           verifiedContracts,
           ensLookup,
@@ -186,10 +168,8 @@ export default function useNavItems(): ReturnType {
     } else {
       blockchainNavItems = [
         txs,
-        internalTxs,
         userOps,
         blocks,
-        topAccounts,
         validators,
         verifiedContracts,
         ensLookup,

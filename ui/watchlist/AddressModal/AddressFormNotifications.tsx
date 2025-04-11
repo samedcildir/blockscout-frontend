@@ -11,7 +11,7 @@ const tokenStandardName = config.chain.tokenStandard;
 const NOTIFICATIONS = [ 'native', 'ERC-20', 'ERC-721', 'ERC-404' ] as const;
 const NOTIFICATIONS_NAMES = [
   config.chain.currency.symbol,
-  `${ tokenStandardName }-20`,
+  `WRAPPED BRC-20 or ERC-20`,
   `${ tokenStandardName }-721, ${ tokenStandardName }-1155 (NFT)`,
   `${ tokenStandardName }-404` ];
 

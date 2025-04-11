@@ -67,25 +67,6 @@ const AddressBalance = ({ data, isLoading }: Props) => {
 
   return (
     <>
-      <DetailsInfoItem.Label
-        hint={ `${ currencyUnits.ether } balance` }
-        isLoading={ isLoading }
-      >
-        Balance
-      </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value alignSelf="center" flexWrap="nowrap">
-        <NativeTokenIcon boxSize={ 6 } mr={ 2 } isLoading={ isLoading }/>
-        <CurrencyValue
-          value={ data.coin_balance || '0' }
-          exchangeRate={ data.exchange_rate }
-          decimals={ String(config.chain.currency.decimals) }
-          currency={ currencyUnits.ether }
-          accuracyUsd={ 2 }
-          accuracy={ 8 }
-          flexWrap="wrap"
-          isLoading={ isLoading }
-        />
-      </DetailsInfoItem.Value>
     </>
   );
 };

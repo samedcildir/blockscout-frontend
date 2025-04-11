@@ -19,6 +19,6 @@ const CANONICAL_ROUTES: Array<Route['pathname']> = [
 
 export default function getCanonicalUrl(pathname: Route['pathname']) {
   if (CANONICAL_ROUTES.includes(pathname)) {
-    return config.app.baseUrl + pathname;
+    return config.app.baseUrl + '/signet' + pathname;
   }
 }

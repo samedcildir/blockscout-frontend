@@ -120,7 +120,7 @@ const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) =>
   const hasActiveFilters = Boolean(tokenTypes?.length);
 
   const tabs = [
-    { id: 'tokens_erc20', title: `${ config.chain.tokenStandard }-20`, component: <ERC20Tokens tokensQuery={ erc20Query }/> },
+    { id: 'tokens_erc20', title: `WRAPPED BRC-20 or ERC-20`, component: <ERC20Tokens tokensQuery={ erc20Query }/> },
     {
       id: 'tokens_nfts',
       title: 'NFTs',

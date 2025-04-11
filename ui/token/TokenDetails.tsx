@@ -136,10 +136,10 @@ const TokenDetails = ({ tokenQuery }: Props) => {
       ) }
 
       <DetailsInfoItem.Label
-        hint="The total amount of tokens issued"
+        hint="The total amount of tokens issued in BRC2.0"
         isLoading={ tokenQuery.isPlaceholderData }
       >
-        Max total supply
+        Max total supply inside BRC2.0
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value
         alignSelf="center"
@@ -154,10 +154,10 @@ const TokenDetails = ({ tokenQuery }: Props) => {
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
-        hint="Number of accounts holding the token"
+        hint="Number of accounts holding the token in BRC2.0"
         isLoading={ tokenQuery.isPlaceholderData }
       >
-        Holders
+        Holders in BRC2.0
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !tokenCountersQuery.isPlaceholderData }>
@@ -166,10 +166,10 @@ const TokenDetails = ({ tokenQuery }: Props) => {
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
-        hint="Number of transfer for the token"
+        hint="Number of transfer for the token in BRC2.0"
         isLoading={ tokenQuery.isPlaceholderData }
       >
-        Transfers
+        Transfers in BRC2.0
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value>
         <Skeleton isLoaded={ !tokenCountersQuery.isPlaceholderData }>
