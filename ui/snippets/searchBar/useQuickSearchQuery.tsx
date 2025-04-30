@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isBech32Address, fromBech32Address } from 'lib/address/bech32';
+import { isBech32Address, fromBech32Address, isBTCAddress, fromBTCAddress } from 'lib/address/bech32';
 import useApiQuery from 'lib/api/useApiQuery';
 import useDebounce from 'lib/hooks/useDebounce';
 
@@ -9,8 +9,15 @@ export default function useQuickSearchQuery() {
 
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
+  let q = debouncedSearchTerm;
+  if (isBTCAddress(debouncedSearchTerm)) {
+    q = fromBTCAddress(debouncedSearchTerm);
+  } else if (isBech32Address(debouncedSearchTerm)) {
+    q = fromBech32Address(debouncedSearchTerm);
+  }
+
   const query = useApiQuery('quick_search', {
-    queryParams: { q: isBech32Address(debouncedSearchTerm) ? fromBech32Address(debouncedSearchTerm) : debouncedSearchTerm },
+    queryParams: { q },
     queryOptions: { enabled: debouncedSearchTerm.trim().length > 0 },
   });
 

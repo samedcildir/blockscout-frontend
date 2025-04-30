@@ -39,6 +39,7 @@
     "monitoring:grafana:local": "docker run -d -p 4000:3000 --name=blockscout_grafana --user $(id -u) --volume $(pwd)/grafana:/var/lib/grafana grafana/grafana-enterprise"
   },
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0",
     "@blockscout/bens-types": "1.4.1",
     "@blockscout/stats-types": "2.5.0-alpha",
     "@blockscout/visualizer-types": "0.2.0",
@@ -73,6 +74,7 @@
     "@types/react-scroll": "^1.8.4",
     "airtable": "^0.12.2",
     "bignumber.js": "^9.1.0",
+    "bitcoinjs-lib": "^6.1.7",
     "blo": "^1.1.1",
     "chakra-react-select": "^4.4.3",
     "crypto-js": "^4.2.0",

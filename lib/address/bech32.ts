@@ -1,8 +1,13 @@
+import ecc from '@bitcoinerlab/secp256k1';
+import { keccak256 } from '@ethersproject/keccak256';
 import { bech32 } from '@scure/base';
+import * as bitcoin from 'bitcoinjs-lib';
 
 import config from 'configs/app';
 import bytesToHex from 'lib/bytesToHex';
 import hexToBytes from 'lib/hexToBytes';
+
+bitcoin.initEccLib(ecc);
 
 export const DATA_PART_REGEXP = /^[\da-z]{38}$/;
 export const BECH_32_SEPARATOR = '1'; // https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki#bech32
@@ -46,4 +51,27 @@ export function fromBech32Address(hash: string) {
   }
 
   return hash;
+}
+
+export function isBTCAddress(hash: string) {
+  try {
+    const pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    const pkscriptBuf = Buffer.from(pkscript, 'hex');
+    const pkscriptHash = keccak256(pkscriptBuf);
+    pkscriptHash.slice(-40);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+export function fromBTCAddress(hash: string) {
+  try {
+    const pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    const pkscriptBuf = Buffer.from(pkscript, 'hex');
+    const pkscriptHash = keccak256(pkscriptBuf);
+    const addr = pkscriptHash.slice(-40);
+    return '0x' + addr;
+  } catch (error) {
+    return hash;
+  }
 }
