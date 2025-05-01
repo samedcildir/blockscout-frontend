@@ -22,11 +22,12 @@ type Props = {
   hash: string;
   hasTag: boolean;
   txQuery: TxQuery;
+  isLoading: boolean;
 };
 
 const feature = config.features.txInterpretation;
 
-const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
+const TxSubHeading = ({ hash, hasTag, txQuery, isLoading }: Props) => {
   const hasInterpretationFeature = feature.isEnabled;
   const isNovesInterpretation = hasInterpretationFeature && feature.provider === 'noves';
 
@@ -70,7 +71,7 @@ const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
       return (
         <TxInterpretation
           summary={ novesSummary }
-          isLoading={ novesInterpretationQuery.isPlaceholderData || txQuery.isPlaceholderData }
+          isLoading={ novesInterpretationQuery.isPlaceholderData || isLoading }
           addressDataMap={ addressDataMap }
           fontSize="lg"
           mr={{ base: 0, lg: 6 }}
@@ -82,7 +83,7 @@ const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
         <Flex mr={{ base: 0, lg: 6 }} flexWrap="wrap" alignItems="center">
           <TxInterpretation
             summary={ txInterpretationQuery.data?.data.summaries[0] }
-            isLoading={ txInterpretationQuery.isPlaceholderData || txQuery.isPlaceholderData }
+            isLoading={ txInterpretationQuery.isPlaceholderData || isLoading }
             addressDataMap={ addressDataMap }
             fontSize="lg"
             mr={ hasViewAllInterpretationsLink ? 3 : 0 }
@@ -111,7 +112,7 @@ const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
               },
             },
           }}
-          isLoading={ txQuery.isPlaceholderData }
+          isLoading={ isLoading }
           fontSize="lg"
           mr={{ base: 0, lg: 6 }}
         />
@@ -121,8 +122,8 @@ const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
     }
   })();
 
-  const isLoading =
-    txQuery.isPlaceholderData ||
+  const isLoading2 =
+    isLoading ||
     (hasNovesInterpretation && novesInterpretationQuery.isPlaceholderData) ||
     (hasInternalInterpretation && txInterpretationQuery.isPlaceholderData);
 
@@ -136,7 +137,7 @@ const TxSubHeading = ({ hash, hasTag, txQuery }: Props) => {
         gap={ 3 }
         mt={{ base: 3, lg: 0 }}
       >
-        { !hasTag && <AccountActionsMenu isLoading={ isLoading }/> }
+        { !hasTag && <AccountActionsMenu isLoading={ isLoading2 }/> }
         { appActionData && (
           <AppActionButton data={ appActionData } txHash={ hash } source="Txn"/>
         ) }

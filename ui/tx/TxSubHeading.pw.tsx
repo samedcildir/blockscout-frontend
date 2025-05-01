@@ -42,7 +42,7 @@ function generateAddressMetadataResponse(tag: AddressMetadataTagApi) {
 }
 
 test('no interpretation +@mobile', async({ render }) => {
-  const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+  const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
   await expect(component).toHaveScreenshot();
 });
 
@@ -53,7 +53,7 @@ test.describe('blockscout provider', () => {
 
   test('with interpretation +@mobile +@dark-mode', async({ render, mockApiResponse }) => {
     await mockApiResponse('tx_interpretation', txInterpretation, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -62,28 +62,28 @@ test.describe('blockscout provider', () => {
     await mockApiResponse('address_metadata_info', metadataResponse, { queryParams: addressMetadataQueryParams });
     await mockAssetResponse(protocolTagWithMeta?.meta?.appLogoURL as string, './playwright/mocks/image_s.jpg');
     await mockApiResponse('tx_interpretation', txInterpretation, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
   test('with interpretation and recipient name +@mobile', async({ render, mockApiResponse }) => {
     const newTxQuery = { ...txQuery, data: txMock.withRecipientName } as TxQuery;
     await mockApiResponse('tx_interpretation', txInterpretation, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery } isLoading={ newTxQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
   test('with interpretation and recipient ENS domain +@mobile', async({ render, mockApiResponse }) => {
     const newTxQuery = { ...txQuery, data: txMock.withRecipientEns } as TxQuery;
     await mockApiResponse('tx_interpretation', txInterpretation, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery } isLoading={ newTxQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
   test('with interpretation and recipient name tag +@mobile', async({ render, mockApiResponse }) => {
     const newTxQuery = { ...txQuery, data: txMock.withRecipientNameTag } as TxQuery;
     await mockApiResponse('tx_interpretation', txInterpretation, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery } isLoading={ newTxQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -93,7 +93,7 @@ test.describe('blockscout provider', () => {
       { data: { summaries: [ ...txInterpretation.data.summaries, ...txInterpretation.data.summaries ] } },
       { pathParams: { hash } },
     );
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -109,7 +109,7 @@ test.describe('blockscout provider', () => {
       { data: { summaries: [ ...txInterpretation.data.summaries, ...txInterpretation.data.summaries ] } },
       { pathParams: { hash } },
     );
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -120,7 +120,7 @@ test.describe('blockscout provider', () => {
     await mockAssetResponse(protocolTagWithMeta?.meta?.appLogoURL as string, './playwright/mocks/image_s.jpg');
     await mockApiResponse('tx_interpretation', { data: { summaries: [] } }, { pathParams: { hash } });
 
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery } isLoading={ newTxQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -130,7 +130,7 @@ test.describe('blockscout provider', () => {
     await mockAssetResponse(protocolTagWithMeta?.meta?.appLogoURL as string, './playwright/mocks/image_s.jpg');
 
     const newTxQuery = { ...txQuery, data: { ...txMock.pending, to: addressMock.contract } } as TxQuery;
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ newTxQuery } isLoading={ newTxQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 
@@ -141,7 +141,7 @@ test.describe('blockscout provider', () => {
       isError: false,
     } as TxQuery;
     await mockApiResponse('tx_interpretation', { data: { summaries: [] } }, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txPendingQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txPendingQuery } isLoading={ txPendingQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 });
@@ -153,7 +153,7 @@ test.describe('noves provider', () => {
 
   test('with interpretation +@mobile +@dark-mode', async({ render, mockApiResponse }) => {
     await mockApiResponse('noves_transaction', novesTransaction, { pathParams: { hash } });
-    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery }/>);
+    const component = await render(<TxSubHeading hash={ hash } hasTag={ false } txQuery={ txQuery } isLoading={ txQuery.isPlaceholderData }/>);
     await expect(component).toHaveScreenshot();
   });
 });

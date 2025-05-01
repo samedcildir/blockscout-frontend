@@ -114,7 +114,7 @@ const TransactionPageContent = () => {
 
   const titleSecondRow = (
     <TxSubHeading hash={ txHashInscriptionIdQuery.data?.inscription_id ? txHashInscriptionIdQuery.data?.inscription_id : hash }
-      hasTag={ Boolean(data?.transaction_tag) } txQuery={ txQuery }/>
+      hasTag={ Boolean(data?.transaction_tag) } txQuery={ txQuery } isLoading={ isPlaceholderData || txHashInscriptionIdQuery.isPlaceholderData }/>
   );
 
   const content = (() => {
