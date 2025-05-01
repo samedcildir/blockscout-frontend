@@ -163,7 +163,7 @@ const SearchBarInput = (
               paddingRight: '36px',
             },
           }}
-          placeholder={ isMobile ? 'Search by btc address / ... ' : 'Search by btc address / evm address / txn hash / block / token... ' }
+          placeholder={ isMobile ? 'Search by btc address / ... ' : 'Search by btc address / inscription id / evm address / txn hash / block / token... ' }
           onChange={ handleChange }
           border={ isHomepage ? 'none' : '2px solid' }
           borderColor={ useColorModeValue('blackAlpha.100', 'whiteAlpha.200') }

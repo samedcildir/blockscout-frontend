@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { isBech32Address, fromBech32Address, isBTCAddress, fromBTCAddress } from 'lib/address/bech32';
+import { isBech32Address, fromBech32Address, isBTCAddress, fromBTCAddress, isInscriptionId } from 'lib/address/bech32';
 import useApiQuery from 'lib/api/useApiQuery';
 import useDebounce from 'lib/hooks/useDebounce';
 
@@ -16,7 +16,7 @@ export default function useQuickSearchQuery() {
     q = fromBech32Address(debouncedSearchTerm);
   }
 
-  const query = useApiQuery('quick_search', {
+  const query = useApiQuery(isInscriptionId(debouncedSearchTerm) ? 'inscription_id_search' : 'quick_search', {
     queryParams: { q },
     queryOptions: { enabled: debouncedSearchTerm.trim().length > 0 },
   });

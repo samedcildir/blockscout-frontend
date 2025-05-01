@@ -574,6 +574,10 @@ export const RESOURCES = {
     path: '/btc_api/v2/btc_contract_hash_inscr_id/:hash',
     pathParams: [ 'hash' as const ],
   },
+  inscription_id_search: {
+    path: '/btc_api/v2/inscription_id_search',
+    filterFields: [ 'q' ],
+  },
 
   // ADDRESS
   address: {
@@ -1387,6 +1391,7 @@ Q extends 'address' ? Address :
 Q extends 'btc_address' ? AddressBtcAddress :
 Q extends 'btc_txhash_inscr_id' ? InscriptionId :
 Q extends 'btc_contract_hash_inscr_id' ? InscriptionId :
+Q extends 'inscription_id_search' ? Array<SearchResultItem> :
 Q extends 'address_counters' ? AddressCounters :
 Q extends 'address_tabs_counters' ? AddressTabsCounters :
 Q extends 'address_txs' ? AddressTransactionsResponse :

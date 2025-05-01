@@ -75,3 +75,15 @@ export function fromBTCAddress(hash: string) {
     return hash;
   }
 }
+
+export function isInscriptionId(inscriptionId: string) {
+  try {
+    const inscriptionIdRegex = /^[0-9a-fA-F]{64}i\d+$/;
+    if (!inscriptionIdRegex.test(inscriptionId)) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
