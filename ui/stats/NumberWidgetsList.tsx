@@ -12,6 +12,7 @@ const UNITS_WITHOUT_SPACE = [ 's' ];
 const hiddenCounters = [
   'transactions fees',
   'transaction fee',
+  'pending transactions',
 ];
 const NumberWidgetsList = () => {
   const { data, isPlaceholderData, isError } = useApiQuery('stats_counters', {

@@ -105,20 +105,6 @@ const Transactions = () => {
           socketInfoAlert={ socketAlert }
           top={ TABS_HEIGHT }
         /> },
-    {
-      id: 'pending',
-      title: 'Pending',
-      component: (
-        <TxsWithFrontendSorting
-          query={ txsPendingQuery }
-          showBlockInfo={ false }
-          showSocketInfo={ txsPendingQuery.pagination.page === 1 }
-          socketInfoNum={ num }
-          socketInfoAlert={ socketAlert }
-          top={ TABS_HEIGHT }
-        />
-      ),
-    },
     config.features.dataAvailability.isEnabled && {
       id: 'blob_txs',
       title: 'Blob txns',
