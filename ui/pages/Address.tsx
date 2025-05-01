@@ -121,11 +121,9 @@ const AddressPageContent = () => {
     addressEnsDomainsQuery.data?.items.find((domain) => domain.name === addressQuery.data?.ens_domain_name) :
     undefined;
 
-  const isLoading = addressQuery.isPlaceholderData;
+  const isLoading = addressQuery.isPlaceholderData || addressBtcAddressQuery.isPlaceholderData || contractInscriptionIdQuery.isPlaceholderData;
   const isTabsLoading =
     isLoading ||
-    addressBtcAddressQuery.isPlaceholderData ||
-    contractInscriptionIdQuery.isPlaceholderData ||
     addressTabsCountersQuery.isPlaceholderData ||
     (config.features.userOps.isEnabled && userOpsAccountQuery.isPlaceholderData) ||
     (config.features.mudFramework.isEnabled && mudTablesCountQuery.isPlaceholderData);
