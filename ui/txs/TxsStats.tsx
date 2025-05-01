@@ -94,16 +94,6 @@ const TxsStats = () => {
           isLoading={ isLoading }
         />
       ) }
-      { pendingTxns && (
-        <StatsWidget
-          label={ txsStatsQuery.data?.pending_transactions_30m?.title ?
-            getLabelFromTitle(txsStatsQuery.data?.pending_transactions_30m?.title) :
-            'Pending transactions' }
-          value={ Number(pendingTxns).toLocaleString() }
-          period={ isStatsFeatureEnabled ? '30min' : '1h' }
-          isLoading={ isLoading }
-        />
-      ) }
     </Box>
   );
 };
