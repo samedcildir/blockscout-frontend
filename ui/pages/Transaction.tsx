@@ -29,7 +29,7 @@ import TxState from 'ui/tx/TxState';
 import TxSubHeading from 'ui/tx/TxSubHeading';
 import TxTokenTransfer from 'ui/tx/TxTokenTransfer';
 import TxUserOps from 'ui/tx/TxUserOps';
-import useTxQuery from 'ui/tx/useTxQuery';
+import { useTxQuery, useTxHashInscriptionIdQuery } from 'ui/tx/useTxQuery';
 
 const txInterpretation = config.features.txInterpretation;
 const rollupFeature = config.features.rollup;
@@ -40,6 +40,7 @@ const TransactionPageContent = () => {
 
   const hash = getQueryParamString(router.query.hash);
   const txQuery = useTxQuery();
+  const txHashInscriptionIdQuery = useTxHashInscriptionIdQuery();
   const { data, isPlaceholderData, isError, error, errorUpdateCount } = txQuery;
 
   const showDegradedView = publicClient && ((isError && error.status !== 422) || isPlaceholderData) && errorUpdateCount > 0;
@@ -47,7 +48,7 @@ const TransactionPageContent = () => {
   const tabs: Array<RoutedTab> = (() => {
     const detailsComponent = showDegradedView ?
       <TxDetailsDegraded hash={ hash } txQuery={ txQuery }/> :
-      <TxDetails txQuery={ txQuery }/>;
+      <TxDetails txQuery={ txQuery } txHashInscriptionIdQuery={ txHashInscriptionIdQuery }/>;
 
     return [
       {
@@ -111,7 +112,10 @@ const TransactionPageContent = () => {
     };
   }, [ appProps.referrer ]);
 
-  const titleSecondRow = <TxSubHeading hash={ hash } hasTag={ Boolean(data?.transaction_tag) } txQuery={ txQuery }/>;
+  const titleSecondRow = (
+    <TxSubHeading hash={ txHashInscriptionIdQuery.data?.inscription_id ? txHashInscriptionIdQuery.data?.inscription_id : hash }
+      hasTag={ Boolean(data?.transaction_tag) } txQuery={ txQuery }/>
+  );
 
   const content = (() => {
     if (isPlaceholderData && !showDegradedView) {

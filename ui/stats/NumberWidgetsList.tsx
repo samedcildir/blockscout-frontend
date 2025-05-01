@@ -9,6 +9,10 @@ import DataFetchAlert from '../shared/DataFetchAlert';
 
 const UNITS_WITHOUT_SPACE = [ 's' ];
 
+const hiddenCounters = [
+  'transactions fees',
+  'transaction fee',
+];
 const NumberWidgetsList = () => {
   const { data, isPlaceholderData, isError } = useApiQuery('stats_counters', {
     queryOptions: {
@@ -18,6 +22,15 @@ const NumberWidgetsList = () => {
 
   if (isError) {
     return <DataFetchAlert/>;
+  }
+
+  if (data) {
+    if (data.counters) {
+      data.counters = data.counters.filter(({ title }) => {
+        const titleLower = title.toLowerCase();
+        return !hiddenCounters.some((hiddenCounter) => titleLower.includes(hiddenCounter));
+      });
+    }
   }
 
   return (

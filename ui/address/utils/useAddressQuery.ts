@@ -2,14 +2,14 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
-import type { Address } from 'types/api/address';
+import type { Address, AddressBtcAddress, InscriptionId } from 'types/api/address';
 
 import type { ResourceError } from 'lib/api/resources';
 import useApiQuery from 'lib/api/useApiQuery';
 import { retry } from 'lib/api/useQueryClientConfig';
 import { SECOND } from 'lib/consts';
 import { publicClient } from 'lib/web3/client';
-import { ADDRESS_INFO } from 'stubs/address';
+import { BTC_ADDRESS, ADDRESS_INFO, ADDRESS_INSCRIPTION_ID } from 'stubs/address';
 import { GET_BALANCE } from 'stubs/RPC';
 
 type RpcResponseType = [
@@ -20,6 +20,9 @@ export type AddressQuery = UseQueryResult<Address, ResourceError<{ status: numbe
   isDegradedData: boolean;
 };
 
+export type AddressBtcAddressQuery = UseQueryResult<AddressBtcAddress, ResourceError<{ status: number }>>;
+export type ContractInscriptionIdQuery = UseQueryResult<InscriptionId, ResourceError<{ status: number }>>;
+
 interface Params {
   hash: string;
   isEnabled?: boolean;
@@ -27,7 +30,7 @@ interface Params {
 
 const NO_RPC_FALLBACK_ERROR_CODES = [ 403 ];
 
-export default function useAddressQuery({ hash, isEnabled = true }: Params): AddressQuery {
+export function useAddressQuery({ hash, isEnabled = true }: Params): AddressQuery {
   const [ isRefetchEnabled, setRefetchEnabled ] = React.useState(false);
 
   const apiQuery = useApiQuery<'address', { status: number }>('address', {
@@ -131,5 +134,87 @@ export default function useAddressQuery({ hash, isEnabled = true }: Params): Add
   return {
     ...query,
     isDegradedData: isRpcQuery,
+  };
+}
+
+export function useAddressBtcAddressQuery({ hash, isEnabled = true }: Params): AddressBtcAddressQuery {
+  const [ isRefetchEnabled, setRefetchEnabled ] = React.useState(false);
+
+  const apiQuery = useApiQuery<'btc_address', { status: number }>('btc_address', {
+    pathParams: { hash },
+    queryOptions: {
+      enabled: isEnabled && Boolean(hash),
+      placeholderData: BTC_ADDRESS,
+      refetchOnMount: false,
+      retry: (failureCount, error) => {
+        if (isRefetchEnabled) {
+          return false;
+        }
+
+        return retry(failureCount, error);
+      },
+      refetchInterval: (): number | false => {
+        return isRefetchEnabled ? 15 * SECOND : false;
+      },
+    },
+  });
+
+  React.useEffect(() => {
+    if (apiQuery.isPlaceholderData || !publicClient) {
+      return;
+    }
+
+    if (apiQuery.isError && apiQuery.errorUpdateCount === 1) {
+      setRefetchEnabled(true);
+    } else if (!apiQuery.isError) {
+      setRefetchEnabled(false);
+    }
+  }, [ apiQuery.errorUpdateCount, apiQuery.isError, apiQuery.isPlaceholderData, apiQuery.error?.status ]);
+
+  const query = apiQuery;
+
+  return {
+    ...query,
+  };
+}
+
+export function useContractInscriptionIdQuery({ hash, isEnabled = true }: Params): ContractInscriptionIdQuery {
+  const [ isRefetchEnabled, setRefetchEnabled ] = React.useState(false);
+
+  const apiQuery = useApiQuery<'btc_contract_hash_inscr_id', { status: number }>('btc_contract_hash_inscr_id', {
+    pathParams: { hash },
+    queryOptions: {
+      enabled: isEnabled && Boolean(hash),
+      placeholderData: ADDRESS_INSCRIPTION_ID,
+      refetchOnMount: false,
+      retry: (failureCount, error) => {
+        if (isRefetchEnabled) {
+          return false;
+        }
+
+        return retry(failureCount, error);
+      },
+      refetchInterval: (): number | false => {
+        return isRefetchEnabled ? 15 * SECOND : false;
+      },
+    },
+  });
+
+  React.useEffect(() => {
+    if (apiQuery.isPlaceholderData || !publicClient) {
+      return;
+    }
+
+    if (apiQuery.isError && apiQuery.errorUpdateCount === 1) {
+      setRefetchEnabled(true);
+    } else if (!apiQuery.isError) {
+      setRefetchEnabled(false);
+    }
+  }, [ apiQuery.errorUpdateCount, apiQuery.isError, apiQuery.isPlaceholderData, apiQuery.error?.status ]);
+
+  const query = apiQuery;
+
+  return {
+    ...query,
   };
 }

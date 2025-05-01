@@ -21,7 +21,6 @@ import { ADDRESS_TABS_COUNTERS } from 'stubs/address';
 import { USER_OPS_ACCOUNT } from 'stubs/userOps';
 import AddressAccountHistory from 'ui/address/AddressAccountHistory';
 import AddressBlocksValidated from 'ui/address/AddressBlocksValidated';
-import AddressCoinBalance from 'ui/address/AddressCoinBalance';
 import AddressContract from 'ui/address/AddressContract';
 import AddressDetails from 'ui/address/AddressDetails';
 import AddressEpochRewards from 'ui/address/AddressEpochRewards';
@@ -40,7 +39,7 @@ import AddressMetadataAlert from 'ui/address/details/AddressMetadataAlert';
 import AddressQrCode from 'ui/address/details/AddressQrCode';
 import AddressEnsDomains from 'ui/address/ensDomains/AddressEnsDomains';
 import SolidityscanReport from 'ui/address/SolidityscanReport';
-import useAddressQuery from 'ui/address/utils/useAddressQuery';
+import { useAddressQuery, useAddressBtcAddressQuery, useContractInscriptionIdQuery } from 'ui/address/utils/useAddressQuery';
 import useCheckAddressFormat from 'ui/address/utils/useCheckAddressFormat';
 import useCheckDomainNameParam from 'ui/address/utils/useCheckDomainNameParam';
 import AccountActionsMenu from 'ui/shared/AccountActionsMenu/AccountActionsMenu';
@@ -73,6 +72,9 @@ const AddressPageContent = () => {
   const checkAddressFormat = useCheckAddressFormat(hash);
   const areQueriesEnabled = !checkDomainName && !checkAddressFormat;
   const addressQuery = useAddressQuery({ hash, isEnabled: areQueriesEnabled });
+
+  const addressBtcAddressQuery = useAddressBtcAddressQuery({ hash, isEnabled: areQueriesEnabled });
+  const contractInscriptionIdQuery = useContractInscriptionIdQuery({ hash, isEnabled: areQueriesEnabled });
 
   const addressTabsCountersQuery = useApiQuery('address_tabs_counters', {
     pathParams: { hash },
@@ -122,6 +124,8 @@ const AddressPageContent = () => {
   const isLoading = addressQuery.isPlaceholderData;
   const isTabsLoading =
     isLoading ||
+    addressBtcAddressQuery.isPlaceholderData ||
+    contractInscriptionIdQuery.isPlaceholderData ||
     addressTabsCountersQuery.isPlaceholderData ||
     (config.features.userOps.isEnabled && userOpsAccountQuery.isPlaceholderData) ||
     (config.features.mudFramework.isEnabled && mudTablesCountQuery.isPlaceholderData);
@@ -156,7 +160,9 @@ const AddressPageContent = () => {
       {
         id: 'index',
         title: 'Details',
-        component: <AddressDetails addressQuery={ addressQuery }/>,
+        component: <AddressDetails addressQuery={ addressQuery }
+          addressBtcAddressQuery={ addressBtcAddressQuery }
+          contractInscriptionIdQuery={ contractInscriptionIdQuery }/>,
       },
       addressQuery.data?.is_contract ? {
         id: 'contract',
@@ -243,11 +249,6 @@ const AddressPageContent = () => {
         count: addressTabsCountersQuery.data?.celo_election_rewards_count,
         component: <AddressEpochRewards shouldRender={ !isTabsLoading } isQueryEnabled={ areQueriesEnabled }/>,
       } : undefined,
-      {
-        id: 'coin_balance_history',
-        title: 'Coin balance history',
-        component: <AddressCoinBalance shouldRender={ !isTabsLoading } isQueryEnabled={ areQueriesEnabled }/>,
-      },
       addressTabsCountersQuery.data?.validations_count ?
         {
           id: 'blocks_validated',
@@ -267,6 +268,8 @@ const AddressPageContent = () => {
     ].filter(Boolean);
   }, [
     addressQuery,
+    addressBtcAddressQuery,
+    contractInscriptionIdQuery,
     contractTabs,
     addressTabsCountersQuery.data,
     userOpsAccountQuery.data,
@@ -371,7 +374,12 @@ const AddressPageContent = () => {
 
   // API always returns hash in check-summed format except for addresses that are not in the database
   // In this case it returns 404 with empty payload, so we calculate check-summed hash on the client
-  const checkSummedHash = React.useMemo(() => addressQuery.data?.hash ?? getCheckedSummedAddress(hash), [ hash, addressQuery.data?.hash ]);
+  const checkSummedHash = React.useMemo(() =>
+    addressBtcAddressQuery.data?.btc_address ??
+      contractInscriptionIdQuery.data?.inscription_id ??
+      (addressQuery.data?.hash ?? getCheckedSummedAddress(hash)),
+  [ hash, addressQuery.data?.hash, addressBtcAddressQuery.data?.btc_address, contractInscriptionIdQuery.data?.inscription_id ],
+  );
 
   const titleSecondRow = (
     <Flex alignItems="center" w="100%" columnGap={ 2 } rowGap={ 2 } flexWrap={{ base: 'wrap', lg: 'nowrap' }}>

@@ -9,7 +9,7 @@ import CopyToClipboard from 'ui/shared/CopyToClipboard';
 import IconSvg from 'ui/shared/IconSvg';
 import LinkInternal from 'ui/shared/links/LinkInternal';
 
-import useAddressQuery from '../utils/useAddressQuery';
+import { useAddressQuery } from '../utils/useAddressQuery';
 
 type TableViewProps = {
   className?: string;

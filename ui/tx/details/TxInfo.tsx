@@ -14,6 +14,7 @@ import BigNumber from 'bignumber.js';
 import React from 'react';
 import { scroller, Element } from 'react-scroll';
 
+import type { InscriptionId } from 'types/api/address';
 import { SCROLL_L2_BLOCK_STATUSES } from 'types/api/scrollL2';
 import type { Transaction } from 'types/api/transaction';
 import { ZKEVM_L2_TX_STATUSES } from 'types/api/transaction';
@@ -71,6 +72,7 @@ import TxInfoScrollFees from './TxInfoScrollFees';
 
 interface Props {
   data: Transaction | undefined;
+  dataInscriptionId: InscriptionId | undefined;
   isLoading: boolean;
   socketStatus?: 'close' | 'error';
 }
@@ -78,7 +80,7 @@ interface Props {
 const externalTxFeature = config.features.externalTxs;
 const rollupFeature = config.features.rollup;
 
-const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
+const TxInfo = ({ data, dataInscriptionId, isLoading, socketStatus }: Props) => {
   const [ isExpanded, setIsExpanded ] = React.useState(false);
 
   const isMobile = useIsMobile();
@@ -111,6 +113,9 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
   }, []);
 
   if (!data) {
+    return null;
+  }
+  if (!dataInscriptionId) {
     return null;
   }
 
@@ -191,6 +196,32 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
           </Skeleton>
         ) }
       </DetailsInfoItem.Value>
+
+      { dataInscriptionId.inscription_id && (
+        <>
+          <DetailsInfoItem.Label
+            hint="Inscription Id associated with the transaction"
+            isLoading={ isLoading }
+          >
+            Inscription Id
+          </DetailsInfoItem.Label>
+          <DetailsInfoItem.Value>
+            <Flex flexWrap="nowrap" alignItems="center" overflow="hidden">
+              <Skeleton isLoaded={ !isLoading } overflow="hidden">
+                <HashStringShortenDynamic hash={ dataInscriptionId.inscription_id }/>
+              </Skeleton>
+              <CopyToClipboard text={ dataInscriptionId.inscription_id } isLoading={ isLoading }/>
+
+              { config.features.metasuites.isEnabled && (
+                <>
+                  <TextSeparator color="gray.500" flexShrink={ 0 } display="none" id="meta-suites__tx-explorer-separator"/>
+                  <Box display="none" flexShrink={ 0 } id="meta-suites__tx-explorer-link"/>
+                </>
+              ) }
+            </Flex>
+          </DetailsInfoItem.Value>
+        </>
+      ) }
 
       <DetailsInfoItem.Label
         hint="Current transaction state: Success, Failed (Error), or Pending (In Process)"

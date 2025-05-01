@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { SocketMessage } from 'lib/socket/types';
+import type { InscriptionId } from 'types/api/address';
 import type { Transaction } from 'types/api/transaction';
 
 import config from 'configs/app';
@@ -16,7 +17,7 @@ import delay from 'lib/delay';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
-import { TX, TX_ZKEVM_L2 } from 'stubs/tx';
+import { TX, TX_ZKEVM_L2, TX_INSCRIPTION_ID } from 'stubs/tx';
 
 const rollupFeature = config.features.rollup;
 
@@ -28,13 +29,14 @@ export type TxQuery = UseQueryResult<Transaction, ResourceError<{ status: number
     toggle: () => void;
   };
 };
+export type TxHashInscriptionIdQuery = UseQueryResult<InscriptionId, ResourceError<{ status: number }>>;
 
 interface Params {
   hash?: string;
   isEnabled?: boolean;
 }
 
-export default function useTxQuery(params?: Params): TxQuery {
+export function useTxQuery(params?: Params): TxQuery {
   const [ socketStatus, setSocketStatus ] = React.useState<'close' | 'error'>();
   const [ isRefetchEnabled, setRefetchEnabled ] = useBoolean(false);
 
@@ -95,4 +97,36 @@ export default function useTxQuery(params?: Params): TxQuery {
     socketStatus,
     setRefetchOnError: setRefetchEnabled,
   }), [ queryResult, socketStatus, setRefetchEnabled ]);
+}
+
+export function useTxHashInscriptionIdQuery(params?: Params): TxHashInscriptionIdQuery {
+  const [ isRefetchEnabled ] = useBoolean(false);
+
+  const router = useRouter();
+  const hash = params?.hash ?? getQueryParamString(router.query.hash);
+
+  const apiQuery = useApiQuery<'btc_txhash_inscr_id', { status: number }>('btc_txhash_inscr_id', {
+    pathParams: { hash },
+    queryOptions: {
+      enabled: Boolean(hash) && params?.isEnabled !== false,
+      placeholderData: TX_INSCRIPTION_ID,
+      refetchOnMount: false,
+      retry: (failureCount, error) => {
+        if (isRefetchEnabled) {
+          return false;
+        }
+
+        return retry(failureCount, error);
+      },
+      refetchInterval: (): number | false => {
+        return isRefetchEnabled ? 15 * SECOND : false;
+      },
+    },
+  });
+
+  const query = apiQuery;
+
+  return {
+    ...query,
+  };
 }

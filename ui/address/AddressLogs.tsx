@@ -12,7 +12,7 @@ import Pagination from 'ui/shared/pagination/Pagination';
 import useQueryWithPages from 'ui/shared/pagination/useQueryWithPages';
 
 import AddressCsvExportLink from './AddressCsvExportLink';
-import useAddressQuery from './utils/useAddressQuery';
+import { useAddressQuery } from './utils/useAddressQuery';
 
 type Props = {
   shouldRender?: boolean;

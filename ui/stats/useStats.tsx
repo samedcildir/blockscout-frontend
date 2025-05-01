@@ -8,12 +8,31 @@ import useApiQuery from 'lib/api/useApiQuery';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { STATS_CHARTS } from 'stubs/stats';
 
+const hiddenSections = [
+  'tokens',
+];
 function isSectionMatches(section: stats.LineChartSection, currentSection: string): boolean {
+  const title = section.title.toLowerCase();
+  if (hiddenSections.some((hiddenSection) => title.includes(hiddenSection))) {
+    return false;
+  }
   return currentSection === 'all' || section.id === currentSection;
 }
 
 function isChartNameMatches(q: string, chart: stats.LineChartInfo) {
   return chart.title.toLowerCase().includes(q.toLowerCase());
+}
+
+const hiddenCharts = [
+  'transaction fee',
+  'block reward',
+  'block size',
+  'gas limit',
+  'gas price',
+];
+function isHiddenChart(chart: stats.LineChartInfo) {
+  const title = chart.title.toLowerCase();
+  return hiddenCharts.some((hiddenChart) => title.includes(hiddenChart));
 }
 
 export default function useStats() {
@@ -48,7 +67,8 @@ export default function useStats() {
   const displayedCharts = React.useMemo(() => {
     return data?.sections
       ?.map((section) => {
-        const charts = section.charts.filter((chart) => isSectionMatches(section, currentSection) && isChartNameMatches(filterQuery, chart));
+        const charts = section.charts.filter((chart) => isSectionMatches(section, currentSection) && isChartNameMatches(filterQuery, chart) &&
+                                                     !isHiddenChart(chart));
 
         return {
           ...section,

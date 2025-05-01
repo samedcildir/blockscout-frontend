@@ -19,7 +19,7 @@ import TabsSkeleton from 'ui/shared/Tabs/TabsSkeleton';
 import useTabIndexFromQuery from 'ui/shared/Tabs/useTabIndexFromQuery';
 import TxLogs from 'ui/tx/TxLogs';
 import TxTokenTransfer from 'ui/tx/TxTokenTransfer';
-import useTxQuery from 'ui/tx/useTxQuery';
+import { useTxQuery } from 'ui/tx/useTxQuery';
 import UserOpDetails from 'ui/userOp/UserOpDetails';
 import UserOpRaw from 'ui/userOp/UserOpRaw';
 import UserOpSubHeading from 'ui/userOp/UserOpSubHeading';

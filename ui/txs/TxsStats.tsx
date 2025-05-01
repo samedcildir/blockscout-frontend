@@ -4,7 +4,6 @@ import React from 'react';
 import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import getCurrencyValue from 'lib/getCurrencyValue';
-import { thinsp } from 'lib/html-entities';
 import { HOMEPAGE_STATS } from 'stubs/stats';
 import { TXS_STATS, TXS_STATS_MICROSERVICE } from 'stubs/tx';
 import StatsWidget from 'ui/shared/stats/StatsWidget';
@@ -103,31 +102,6 @@ const TxsStats = () => {
           value={ Number(pendingTxns).toLocaleString() }
           period={ isStatsFeatureEnabled ? '30min' : '1h' }
           isLoading={ isLoading }
-        />
-      ) }
-      { txFeeSum24h != null && (
-        <StatsWidget
-          label={ txsStatsQuery.data?.transactions_fee_24h?.title ?
-            getLabelFromTitle(txsStatsQuery.data?.transactions_fee_24h?.title) :
-            'Transactions fees' }
-          value={ txFeeSum24h.toLocaleString(undefined, { maximumFractionDigits: 2 }) }
-          valuePostfix={ thinsp + config.chain.currency.symbol }
-          period="24h"
-          isLoading={ isLoading }
-          href={ config.features.stats.isEnabled ? { pathname: '/stats/[id]', query: { id: 'txnsFee' } } : undefined }
-        />
-      ) }
-      { txFeeAvg && (
-        <StatsWidget
-          label={ txsStatsQuery.data?.average_transactions_fee_24h?.title ?
-            getLabelFromTitle(txsStatsQuery.data?.average_transactions_fee_24h?.title) :
-            'Avg. transaction fee' }
-          value={ txFeeAvg.usd ? txFeeAvg.usd : txFeeAvg.valueStr }
-          valuePrefix={ txFeeAvg.usd ? '$' : undefined }
-          valuePostfix={ txFeeAvg.usd ? undefined : thinsp + config.chain.currency.symbol }
-          period="24h"
-          isLoading={ isLoading }
-          href={ config.features.stats.isEnabled ? { pathname: '/stats/[id]', query: { id: 'averageTxnFee' } } : undefined }
         />
       ) }
     </Box>

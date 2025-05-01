@@ -6,8 +6,10 @@ import type {
   AddressEpochRewardsItem,
   AddressMudTableItem,
   AddressNFT,
+  AddressBtcAddress,
   AddressTabsCounters,
   AddressTokenBalance,
+  InscriptionId,
 } from 'types/api/address';
 import type { AddressesItem } from 'types/api/addresses';
 
@@ -44,6 +46,14 @@ export const ADDRESS_COUNTERS: AddressCounters = {
   token_transfers_count: '420',
   transactions_count: '119020',
   validations_count: '0',
+};
+
+export const ADDRESS_INSCRIPTION_ID: InscriptionId = {
+  inscription_id: '2805f6f55b76f7159699bb99a9f0f1f69f51914710c342bb08b907a6a114a48di0',
+};
+
+export const BTC_ADDRESS: AddressBtcAddress = {
+  btc_address: 'tb1qrzr2ffy92jtj4huhd6kmj3345tgp02lx9q9j7j',
 };
 
 export const ADDRESS_TABS_COUNTERS: AddressTabsCounters = {

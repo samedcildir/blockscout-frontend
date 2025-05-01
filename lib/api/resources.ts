@@ -39,6 +39,8 @@ import type {
   AddressMudRecord,
   AddressEpochRewardsResponse,
   AddressXStarResponse,
+  AddressBtcAddress,
+  InscriptionId,
 } from 'types/api/address';
 import type { AddressesResponse, AddressesMetadataSearchResult, AddressesMetadataSearchFilters } from 'types/api/addresses';
 import type { AddressMetadataInfo, PublicTagTypesResponse } from 'types/api/addressMetadata';
@@ -557,6 +559,20 @@ export const RESOURCES = {
   addresses_metadata_search: {
     path: '/api/v2/proxy/metadata/addresses',
     filterFields: [ 'slug' as const, 'tag_type' as const ],
+  },
+
+  // BTC API
+  btc_address: {
+    path: '/btc_api/v2/btc_address/:hash',
+    pathParams: [ 'hash' as const ],
+  },
+  btc_txhash_inscr_id: {
+    path: '/btc_api/v2/btc_txhash_inscr_id/:hash',
+    pathParams: [ 'hash' as const ],
+  },
+  btc_contract_hash_inscr_id: {
+    path: '/btc_api/v2/btc_contract_hash_inscr_id/:hash',
+    pathParams: [ 'hash' as const ],
   },
 
   // ADDRESS
@@ -1368,6 +1384,9 @@ Q extends 'tx_external_transactions' ? Array<string> :
 Q extends 'addresses' ? AddressesResponse :
 Q extends 'addresses_metadata_search' ? AddressesMetadataSearchResult :
 Q extends 'address' ? Address :
+Q extends 'btc_address' ? AddressBtcAddress :
+Q extends 'btc_txhash_inscr_id' ? InscriptionId :
+Q extends 'btc_contract_hash_inscr_id' ? InscriptionId :
 Q extends 'address_counters' ? AddressCounters :
 Q extends 'address_tabs_counters' ? AddressTabsCounters :
 Q extends 'address_txs' ? AddressTransactionsResponse :

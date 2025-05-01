@@ -11,7 +11,7 @@ import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
 import getBlockReward from 'lib/block/getBlockReward';
-import { GWEI, WEI, WEI_IN_GWEI, ZERO } from 'lib/consts';
+import { GWEI, WEI, ZERO } from 'lib/consts';
 import { space } from 'lib/html-entities';
 import getNetworkValidationActionText from 'lib/networks/getNetworkValidationActionText';
 import getNetworkValidatorTitle from 'lib/networks/getNetworkValidatorTitle';
@@ -235,18 +235,6 @@ const BlockDetails = ({ query }: Props) => {
           </DetailsInfoItem.Value>
         </>
       ) }
-
-      <DetailsInfoItem.Label
-        hint="Size of the block in bytes"
-        isLoading={ isPlaceholderData }
-      >
-        Size
-      </DetailsInfoItem.Label>
-      <DetailsInfoItem.Value>
-        <Skeleton isLoaded={ !isPlaceholderData }>
-          { data.size.toLocaleString() }
-        </Skeleton>
-      </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
         hint="Date & time at which block was produced."
@@ -484,29 +472,6 @@ const BlockDetails = ({ query }: Props) => {
         </>
       ) }
 
-      { data.base_fee_per_gas && (
-        <>
-          <DetailsInfoItem.Label
-            hint="Minimum fee required per unit of gas. Fee adjusts based on network congestion"
-            isLoading={ isPlaceholderData }
-          >
-            Base fee per gas
-          </DetailsInfoItem.Label>
-          <DetailsInfoItem.Value>
-            { isPlaceholderData ? (
-              <Skeleton isLoaded={ !isPlaceholderData } h="20px" maxW="380px" w="100%"/>
-            ) : (
-              <>
-                <Text>{ BigNumber(data.base_fee_per_gas).dividedBy(WEI).toFixed() } { currencyUnits.ether } </Text>
-                <Text variant="secondary" whiteSpace="pre">
-                  { space }({ BigNumber(data.base_fee_per_gas).dividedBy(WEI_IN_GWEI).toFixed() } { currencyUnits.gwei })
-                </Text>
-              </>
-            ) }
-          </DetailsInfoItem.Value>
-        </>
-      ) }
-
       { !config.UI.views.block.hiddenFields?.burnt_fees && !burntFees.isEqualTo(ZERO) && (
         <>
           <DetailsInfoItem.Label
@@ -653,30 +618,6 @@ const BlockDetails = ({ query }: Props) => {
               </DetailsInfoItem.Value>
             </>
           ) }
-
-          <DetailsInfoItem.Label
-            hint={ `Block difficulty for ${ validatorTitle }, used to calibrate block generation time` }
-          >
-            Difficulty
-          </DetailsInfoItem.Label>
-          <DetailsInfoItem.Value overflow="hidden">
-            <HashStringShortenDynamic hash={ BigNumber(data.difficulty).toFormat() }/>
-          </DetailsInfoItem.Value>
-
-          { data.total_difficulty && (
-            <>
-              <DetailsInfoItem.Label
-                hint="Total difficulty of the chain until this block"
-              >
-                Total difficulty
-              </DetailsInfoItem.Label>
-              <DetailsInfoItem.Value overflow="hidden">
-                <HashStringShortenDynamic hash={ BigNumber(data.total_difficulty).toFormat() }/>
-              </DetailsInfoItem.Value>
-            </>
-          ) }
-
-          <DetailsInfoItemDivider/>
 
           <DetailsInfoItem.Label
             hint="The SHA256 hash of the block"

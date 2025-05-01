@@ -1,4 +1,5 @@
 import type * as stats from '@blockscout/stats-types';
+import type { InscriptionId } from 'types/api/address';
 import type { RawTracesResponse } from 'types/api/rawTrace';
 import type { Transaction, TransactionsStats } from 'types/api/transaction';
 
@@ -58,6 +59,10 @@ export const TX_ZKEVM_L2: Transaction = {
   zkevm_sequence_hash: '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
   zkevm_status: 'Confirmed by Sequencer',
   zkevm_verify_hash: '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
+};
+
+export const TX_INSCRIPTION_ID: InscriptionId = {
+  inscription_id: '2805f6f55b76f7159699bb99a9f0f1f69f51914710c342bb08b907a6a114a48di0',
 };
 
 export const TX_RAW_TRACE: RawTracesResponse = [];

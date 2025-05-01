@@ -191,6 +191,13 @@ export type AddressWithdrawalsItem = {
   validator_index: number;
 };
 
+export type AddressBtcAddress = {
+  btc_address: string | null;
+};
+export type InscriptionId = {
+  inscription_id: string | null;
+};
+
 export type AddressTabsCounters = {
   internal_transactions_count: number | null;
   logs_count: number | null;

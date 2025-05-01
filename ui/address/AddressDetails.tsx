@@ -27,13 +27,15 @@ import AddressSaveOnGas from './details/AddressSaveOnGas';
 import FilecoinActorTag from './filecoin/FilecoinActorTag';
 import TokenSelect from './tokenSelect/TokenSelect';
 import useAddressCountersQuery from './utils/useAddressCountersQuery';
-import type { AddressQuery } from './utils/useAddressQuery';
+import type { AddressQuery, AddressBtcAddressQuery, ContractInscriptionIdQuery } from './utils/useAddressQuery';
 
 interface Props {
   addressQuery: AddressQuery;
+  addressBtcAddressQuery: AddressBtcAddressQuery;
+  contractInscriptionIdQuery: ContractInscriptionIdQuery;
 }
 
-const AddressDetails = ({ addressQuery }: Props) => {
+const AddressDetails = ({ addressQuery, addressBtcAddressQuery, contractInscriptionIdQuery }: Props) => {
   const router = useRouter();
 
   const addressHash = getQueryParamString(router.query.hash);
@@ -63,6 +65,14 @@ const AddressDetails = ({ addressQuery }: Props) => {
     creator_address_hash: null,
   }), [ addressHash ]);
 
+  const error404DataBtcAddress = React.useMemo(() => ({
+    btc_address: null,
+  }), [ ]);
+
+  const error404DataInscriptionId = React.useMemo(() => ({
+    inscription_id: null,
+  }), [ ]);
+
   // error handling (except 404 codes)
   if (addressQuery.isError) {
     if (isCustomAppError(addressQuery.error)) {
@@ -76,8 +86,16 @@ const AddressDetails = ({ addressQuery }: Props) => {
   }
 
   const data = addressQuery.isError ? error404Data : addressQuery.data;
+  const dataBtcAddress = addressBtcAddressQuery.isError ? error404DataBtcAddress : addressBtcAddressQuery.data;
+  const dataInscriptionId = contractInscriptionIdQuery.isError ? error404DataInscriptionId : contractInscriptionIdQuery.data;
 
   if (!data) {
+    return null;
+  }
+  if (!dataBtcAddress) {
+    return null;
+  }
+  if (!dataInscriptionId) {
     return null;
   }
 
@@ -126,6 +144,23 @@ const AddressDetails = ({ addressQuery }: Props) => {
               hint="0x-style address to which the Filecoin address is assigned by the Ethereum Address Manager"
             >
               Ethereum Address
+            </DetailsInfoItem.Label>
+            <DetailsInfoItem.Value flexWrap="nowrap">
+              <AddressEntity
+                address={{ hash: data.hash }}
+                noIcon
+                noLink
+              />
+            </DetailsInfoItem.Value>
+          </>
+        ) }
+
+        { (dataBtcAddress.btc_address || dataInscriptionId.inscription_id) && !addressQuery.isPlaceholderData && (
+          <>
+            <DetailsInfoItem.Label
+              hint="Corresponding EVM Address"
+            >
+              EVM Address
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value flexWrap="nowrap">
               <AddressEntity
