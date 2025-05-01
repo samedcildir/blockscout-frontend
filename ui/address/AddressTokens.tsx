@@ -5,7 +5,7 @@ import React from 'react';
 import type { NFTTokenType } from 'types/api/token';
 import type { PaginationParams } from 'ui/shared/pagination/types';
 
-import config from 'configs/app';
+import useApiQuery from 'lib/api/useApiQuery';
 import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
 import getFilterValuesFromQuery from 'lib/getFilterValuesFromQuery';
@@ -13,7 +13,7 @@ import useIsMobile from 'lib/hooks/useIsMobile';
 import useIsMounted from 'lib/hooks/useIsMounted';
 import getQueryParamString from 'lib/router/getQueryParamString';
 import { NFT_TOKEN_TYPE_IDS } from 'lib/token/tokenTypes';
-import { ADDRESS_TOKEN_BALANCE_ERC_20, ADDRESS_NFT_1155, ADDRESS_COLLECTION } from 'stubs/address';
+import { ADDRESS_TOKEN_BALANCE_ERC_20, ADDRESS_NFT_1155, ADDRESS_COLLECTION, ADDRESS_EXTERNAL_TOKENS } from 'stubs/address';
 import { generateListStub } from 'stubs/utils';
 import PopoverFilter from 'ui/shared/filters/PopoverFilter';
 import TokenTypeFilter from 'ui/shared/filters/TokenTypeFilter';
@@ -74,6 +74,14 @@ const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) =>
     },
   });
 
+  const externalTokensQuery = useApiQuery('address_external_tokens', {
+    pathParams: { hash },
+    queryOptions: {
+      enabled: isQueryEnabled && Boolean(hash),
+      placeholderData: ADDRESS_EXTERNAL_TOKENS,
+    },
+  });
+
   const collectionsQuery = useQueryWithPages({
     resourceName: 'address_collections',
     pathParams: { hash },
@@ -120,7 +128,8 @@ const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) =>
   const hasActiveFilters = Boolean(tokenTypes?.length);
 
   const tabs = [
-    { id: 'tokens_erc20', title: `WRAPPED BRC-20 or pBRC-20`, component: <ERC20Tokens tokensQuery={ erc20Query }/> },
+    { id: 'tokens_erc20', title: `WRAPPED BRC-20 or pBRC-20`, component: <ERC20Tokens tokensQuery={ erc20Query }
+      externalTokensQuery={ externalTokensQuery }/> },
     {
       id: 'tokens_nfts',
       title: 'NFTs',

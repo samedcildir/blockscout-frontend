@@ -51,6 +51,11 @@ export interface AddressTokenBalance {
   value: string;
   token_instance: TokenInstance | null;
 }
+export interface AddressExternalTokenBalance {
+  external_token_name: string | null;
+  external_value: string;
+  external_decimals: string | null;
+}
 
 export type AddressNFT = TokenInstance & {
   token: TokenInfo;
@@ -63,6 +68,10 @@ export type AddressCollection = {
   amount: string;
   token_instances: Array<Omit<AddressNFT, 'token'>>;
 };
+
+export interface AddressExternalTokensResponse {
+  items: Array<AddressExternalTokenBalance>;
+}
 
 export interface AddressTokensResponse {
   items: Array<AddressTokenBalance>;

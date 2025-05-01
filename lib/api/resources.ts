@@ -41,6 +41,7 @@ import type {
   AddressXStarResponse,
   AddressBtcAddress,
   InscriptionId,
+  AddressExternalTokensResponse,
 } from 'types/api/address';
 import type { AddressesResponse, AddressesMetadataSearchResult, AddressesMetadataSearchFilters } from 'types/api/addresses';
 import type { AddressMetadataInfo, PublicTagTypesResponse } from 'types/api/addressMetadata';
@@ -577,6 +578,10 @@ export const RESOURCES = {
   inscription_id_search: {
     path: '/btc_api/v2/inscription_id_search',
     filterFields: [ 'q' ],
+  },
+  address_external_tokens: {
+    path: '/btc_api/v2/brc20_balance/:hash',
+    pathParams: [ 'hash' as const ],
   },
 
   // ADDRESS
@@ -1392,6 +1397,7 @@ Q extends 'btc_address' ? AddressBtcAddress :
 Q extends 'btc_txhash_inscr_id' ? InscriptionId :
 Q extends 'btc_contract_hash_inscr_id' ? InscriptionId :
 Q extends 'inscription_id_search' ? Array<SearchResultItem> :
+Q extends 'address_external_tokens' ? AddressExternalTokensResponse :
 Q extends 'address_counters' ? AddressCounters :
 Q extends 'address_tabs_counters' ? AddressTabsCounters :
 Q extends 'address_txs' ? AddressTransactionsResponse :

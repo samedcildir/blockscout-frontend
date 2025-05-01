@@ -1,6 +1,10 @@
 import { Show, Hide } from '@chakra-ui/react';
+import type { UseQueryResult } from '@tanstack/react-query';
 import React from 'react';
 
+import type { AddressTokenBalance, AddressExternalTokenBalance, AddressExternalTokensResponse } from 'types/api/address';
+
+import type { ResourceError } from 'lib/api/resources';
 import useIsMobile from 'lib/hooks/useIsMobile';
 import ActionBar from 'ui/shared/ActionBar';
 import DataListDisplay from 'ui/shared/DataListDisplay';
@@ -12,12 +16,44 @@ import ERC20TokensTable from './ERC20TokensTable';
 
 type Props = {
   tokensQuery: QueryWithPagesResult<'address_tokens'>;
+  externalTokensQuery: UseQueryResult<AddressExternalTokensResponse, ResourceError<unknown>>;
 };
 
-const ERC20Tokens = ({ tokensQuery }: Props) => {
+function addExternalData(tokensData: Array<AddressTokenBalance>, externalTokensData: Array<AddressExternalTokenBalance> | undefined):
+Array<AddressTokenBalance & AddressExternalTokenBalance> {
+  if (externalTokensData == null) {
+    return tokensData.map((token) => ({
+      ...token,
+      external_token_name: null,
+      external_value: '',
+      external_decimals: null,
+    }));
+  }
+
+  return tokensData.map((token) => {
+    let externalToken: AddressExternalTokenBalance = {
+      external_token_name: null,
+      external_value: '',
+      external_decimals: null,
+    };
+    if (token.token.icon_url != null) {
+      const foundExternalToken = externalTokensData.find((externalTokenFound) => externalTokenFound.external_token_name === token.token.name);
+      if (foundExternalToken != null) {
+        externalToken = foundExternalToken;
+      }
+    }
+    return {
+      ...token,
+      ...externalToken,
+    };
+  });
+}
+
+const ERC20Tokens = ({ tokensQuery, externalTokensQuery }: Props) => {
   const isMobile = useIsMobile();
 
   const { isError, isPlaceholderData, data, pagination } = tokensQuery;
+  const isLoading = isPlaceholderData || externalTokensQuery.isPlaceholderData;
 
   const actionBar = isMobile && pagination.isVisible && (
     <ActionBar mt={ -6 }>
@@ -27,7 +63,8 @@ const ERC20Tokens = ({ tokensQuery }: Props) => {
 
   const content = data?.items ? (
     <>
-      <Hide below="lg" ssr={ false }><ERC20TokensTable data={ data.items } top={ pagination.isVisible ? 72 : 0 } isLoading={ isPlaceholderData }/></Hide>
+      <Hide below="lg" ssr={ false }><ERC20TokensTable data={ addExternalData(data.items, externalTokensQuery.data?.items) }
+        top={ pagination.isVisible ? 72 : 0 } isLoading={ isLoading }/></Hide>
       <Show below="lg" ssr={ false }>{ data.items.map((item, index) => (
         <ERC20TokensListItem
           key={ item.token.address + (isPlaceholderData ? index : '') }

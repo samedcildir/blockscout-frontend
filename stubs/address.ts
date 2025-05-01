@@ -10,6 +10,7 @@ import type {
   AddressTabsCounters,
   AddressTokenBalance,
   InscriptionId,
+  AddressExternalTokensResponse,
 } from 'types/api/address';
 import type { AddressesItem } from 'types/api/addresses';
 
@@ -114,6 +115,16 @@ export const ADDRESS_NFT_404: AddressNFT = {
   token: TOKEN_INFO_ERC_404,
   value: '10',
   ...TOKEN_INSTANCE,
+};
+
+export const ADDRESS_EXTERNAL_TOKENS: AddressExternalTokensResponse = {
+  items: [
+    {
+      external_token_name: 'ordi',
+      external_value: '1000000000000000000000',
+      external_decimals: '18',
+    },
+  ],
 };
 
 export const ADDRESS_COLLECTION: AddressCollection = {
