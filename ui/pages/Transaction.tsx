@@ -94,7 +94,7 @@ const TransactionPageContent = () => {
 
   const tags = (
     <EntityTags
-      isLoading={ isPlaceholderData }
+      isLoading={ isPlaceholderData || txHashInscriptionIdQuery.isPlaceholderData }
       tags={ txTags }
     />
   );
@@ -118,7 +118,7 @@ const TransactionPageContent = () => {
   );
 
   const content = (() => {
-    if (isPlaceholderData && !showDegradedView) {
+    if ((isPlaceholderData || txHashInscriptionIdQuery.isPlaceholderData) && !showDegradedView) {
       return (
         <>
           <TabsSkeleton tabs={ tabs } mt={ 6 }/>
