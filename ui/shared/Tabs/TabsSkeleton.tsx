@@ -30,9 +30,9 @@ const TabsSkeleton = ({ className, tabs, size = 'md' }: Props) => {
   const bgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
   const tabIndex = useTabIndexFromQuery(tabs || []);
 
-  if (tabs.length === 1) {
+  /*if (tabs.length === 1) {
     return null;
-  }
+  }*/
 
   return (
     <Flex className={ className } my={ 8 } alignItems="center" overflow="hidden">

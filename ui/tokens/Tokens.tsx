@@ -35,7 +35,7 @@ const Tokens = ({ query, onSortChange, sort, actionBar, description, hasActiveFi
         { description }
         { data.items.map((item, index) => (
           <TokensListItem
-            key={ item.address + (isPlaceholderData ? index : '') }
+            key={ item.address + item.name + (isPlaceholderData ? index : '') }
             token={ item }
             index={ index }
             page={ pagination.page }

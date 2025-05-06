@@ -1,15 +1,17 @@
-import { Tag as ChakraTag } from '@chakra-ui/react';
+import { Tag as ChakraTag, Flex } from '@chakra-ui/react';
 import type { TagProps } from '@chakra-ui/react';
 import React from 'react';
 
 import Skeleton from 'ui/shared/chakra/Skeleton';
+import Hint from 'ui/shared/Hint';
 import TruncatedTextTooltip from 'ui/shared/TruncatedTextTooltip';
 
 export interface Props extends TagProps {
+  hint?: React.ReactNode;
   isLoading?: boolean;
 }
 
-const Tag = ({ isLoading, ...props }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
+const Tag = ({ hint, isLoading, ...props }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
 
   if (props.isTruncated && typeof props.children === 'string') {
     if (!props.children) {
@@ -25,9 +27,14 @@ const Tag = ({ isLoading, ...props }: Props, ref: React.ForwardedRef<HTMLDivElem
     );
   }
   return (
-    <Skeleton isLoaded={ !isLoading } display="inline-block" borderRadius="sm" maxW="100%">
-      <ChakraTag { ...props } ref={ ref }/>
-    </Skeleton>
+    <Flex columnGap={ 2 } alignItems="flex-start">
+      { hint &&
+          <Hint label={ hint } isLoading={ isLoading } my={{ lg: '2px' }}/>
+      }
+      <Skeleton isLoaded={ !isLoading } display="inline-block" borderRadius="sm" maxW="100%">
+        <ChakraTag { ...props } ref={ ref }/>
+      </Skeleton>
+    </Flex>
   );
 };
 

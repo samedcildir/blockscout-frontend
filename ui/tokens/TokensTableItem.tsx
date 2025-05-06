@@ -34,7 +34,6 @@ const TokensTableItem = ({
     address,
     filecoin_robust_address: filecoinRobustAddress,
     exchange_rate: exchangeRate,
-    type,
     holders,
     circulating_market_cap: marketCap,
     origin_chain_id: originalChainId,
@@ -81,24 +80,29 @@ const TokensTableItem = ({
               fontSize="sm"
               fontWeight="700"
             />
-            <Flex columnGap={ 2 } py="5px" alignItems="center">
-              <AddressEntity
-                address={ tokenAddress }
-                isLoading={ isLoading }
-                noIcon
-                fontSize="sm"
-                fontWeight={ 500 }
-              />
-              <AddressAddToWallet
-                token={ token }
-                isLoading={ isLoading }
-                iconSize={ 5 }
-                opacity={ 0 }
-                _groupHover={{ opacity: 1 }}
-              />
-            </Flex>
+            { address !== '' && (
+              <Flex columnGap={ 2 } py="5px" alignItems="center">
+                <AddressEntity
+                  address={ tokenAddress }
+                  isLoading={ isLoading }
+                  noIcon
+                  fontSize="sm"
+                  fontWeight={ 500 }
+                />
+                <AddressAddToWallet
+                  token={ token }
+                  isLoading={ isLoading }
+                  iconSize={ 5 }
+                  opacity={ 0 }
+                  _groupHover={{ opacity: 1 }}
+                />
+              </Flex>
+            ) }
             <Flex columnGap={ 1 }>
-              <Tag isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
+              <Tag
+                hint={ getHint(token) }
+                isLoading={ isLoading }
+              >{ getTokenTypeName(token) }</Tag>
               { bridgedChainTag && <Tag isLoading={ isLoading }>{ bridgedChainTag }</Tag> }
             </Flex>
           </Flex>
@@ -128,5 +132,15 @@ const TokensTableItem = ({
     </Tr>
   );
 };
+
+function getHint(token: TokenInfo) {
+  if (token.address === '') {
+    return 'Base BRC20 tokens: Ticker names are unique identifiers.';
+  }
+  if (token.icon_url != null) {
+    return 'Wrapped BRC20 tokens: Ticker names are unique identifiers. These represent base BRC20 tokens inside the programmable module.';
+  }
+  return 'pBRC-20 tokens: Exist only within the programmable module. Contract addresses are unique; ticker names are not unique!';
+}
 
 export default TokensTableItem;

@@ -4,6 +4,7 @@ import React from 'react';
 
 import type { AddressParam } from 'types/api/addressParams';
 
+import { isBTCAddress, fromBTCAddress } from 'lib/address/bech32';
 import type { EntityProps } from 'ui/shared/entities/address/AddressEntity';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
 import AddressEntityWithTokenFilter from 'ui/shared/entities/address/AddressEntityWithTokenFilter';
@@ -35,6 +36,8 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
   ) ?? 'long';
 
   const Entity = tokenHash ? AddressEntityWithTokenFilter : AddressEntity;
+  const fromHash = isBTCAddress(from.hash) ? fromBTCAddress(from.hash) : from.hash;
+  const toHash = to && isBTCAddress(to.hash) ? fromBTCAddress(to.hash) : to?.hash;
 
   if (mode === 'compact') {
     return (
@@ -42,14 +45,14 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
         <Flex alignItems="center" columnGap={ 2 }>
           <AddressFromToIcon
             isLoading={ isLoading }
-            type={ getTxCourseType(from.hash, to?.hash, current) }
+            type={ getTxCourseType(fromHash, toHash, current) }
             transform="rotate(90deg)"
           />
           <Entity
             address={ from }
             isLoading={ isLoading }
-            noLink={ current === from.hash }
-            noCopy={ current === from.hash }
+            noLink={ current === fromHash }
+            noCopy={ current === fromHash }
             noIcon={ noIcon }
             tokenHash={ tokenHash }
             truncation="constant"
@@ -61,8 +64,8 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
           <Entity
             address={ to }
             isLoading={ isLoading }
-            noLink={ current === to.hash }
-            noCopy={ current === to.hash }
+            noLink={ current === toHash }
+            noCopy={ current === toHash }
             noIcon={ noIcon }
             tokenHash={ tokenHash }
             truncation="constant"
@@ -75,7 +78,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
     );
   }
 
-  const isOutgoing = current === from.hash;
+  const isOutgoing = current === fromHash;
   const iconSize = 20;
 
   return (
@@ -92,14 +95,14 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
       />
       <AddressFromToIcon
         isLoading={ isLoading }
-        type={ getTxCourseType(from.hash, to?.hash, current) }
+        type={ getTxCourseType(fromHash, toHash, current) }
       />
       { to && (
         <Entity
           address={ to }
           isLoading={ isLoading }
-          noLink={ current === to.hash }
-          noCopy={ current === to.hash }
+          noLink={ current === toHash }
+          noCopy={ current === toHash }
           noIcon={ noIcon }
           tokenHash={ tokenHash }
           truncation="constant"

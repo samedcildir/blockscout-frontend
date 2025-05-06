@@ -583,6 +583,14 @@ export const RESOURCES = {
     path: '/btc_api/v2/brc20_balance/:hash',
     pathParams: [ 'hash' as const ],
   },
+  external_tokens: {
+    path: '/btc_api/v2/brc20_tokens',
+    filterFields: [ 'q' as const ],
+  },
+  btc_address_tabs_counters: {
+    path: '/btc_api/v2/address_tabs_counters/:hash',
+    pathParams: [ 'hash' as const ],
+  },
 
   // ADDRESS
   address: {
@@ -1331,7 +1339,8 @@ export type PaginatedResources = 'blocks' | 'block_txs' | 'block_election_reward
 'watchlist' | 'private_tags_address' | 'private_tags_tx' |
 'domains_lookup' | 'addresses_lookup' | 'user_ops' | 'validators_stability' | 'validators_blackfort' | 'validators_zilliqa' | 'noves_address_history' |
 'token_transfers_all' | 'scroll_l2_txn_batches' | 'scroll_l2_txn_batch_txs' | 'scroll_l2_txn_batch_blocks' |
-'scroll_l2_deposits' | 'scroll_l2_withdrawals' | 'advanced_filter' | 'pools' | 'optimistic_l2_interop_messages';
+'scroll_l2_deposits' | 'scroll_l2_withdrawals' | 'advanced_filter' | 'pools' | 'optimistic_l2_interop_messages' |
+'external_tokens';
 
 export type PaginatedResponse<Q extends PaginatedResources> = ResourcePayload<Q>;
 
@@ -1398,6 +1407,8 @@ Q extends 'btc_txhash_inscr_id' ? InscriptionId :
 Q extends 'btc_contract_hash_inscr_id' ? InscriptionId :
 Q extends 'inscription_id_search' ? Array<SearchResultItem> :
 Q extends 'address_external_tokens' ? AddressExternalTokensResponse :
+Q extends 'external_tokens' ? TokensResponse :
+Q extends 'btc_address_tabs_counters' ? AddressTabsCounters :
 Q extends 'address_counters' ? AddressCounters :
 Q extends 'address_tabs_counters' ? AddressTabsCounters :
 Q extends 'address_txs' ? AddressTransactionsResponse :
@@ -1578,6 +1589,7 @@ Q extends 'address_collections' ? AddressNFTTokensFilter :
 Q extends 'search' ? SearchResultFilters :
 Q extends 'token_inventory' ? TokenInventoryFilters :
 Q extends 'tokens' ? TokensFilters :
+Q extends 'external_tokens' ? TokensFilters :
 Q extends 'tokens_bridged' ? TokensBridgedFilters :
 Q extends 'verified_contracts' ? VerifiedContractsFilters :
 Q extends 'addresses_lookup' ? EnsAddressLookupFilters :
@@ -1595,6 +1607,7 @@ never;
 /* eslint-disable @stylistic/indent */
 export type PaginationSorting<Q extends PaginatedResources> =
 Q extends 'tokens' ? TokensSorting :
+Q extends 'external_tokens' ? TokensSorting :
 Q extends 'tokens_bridged' ? TokensSorting :
 Q extends 'verified_contracts' ? VerifiedContractsSorting :
 Q extends 'address_txs' ? TransactionsSorting :

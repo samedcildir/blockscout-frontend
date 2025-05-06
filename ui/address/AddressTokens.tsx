@@ -44,11 +44,12 @@ const TAB_LIST_PROPS_MOBILE = {
 const getTokenFilterValue = (getFilterValuesFromQuery<NFTTokenType>).bind(null, NFT_TOKEN_TYPE_IDS);
 
 type Props = {
+  count: number | null;
   shouldRender?: boolean;
   isQueryEnabled?: boolean;
 };
 
-const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) => {
+const AddressTokens = ({ count, shouldRender = true, isQueryEnabled = true }: Props) => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const isMounted = useIsMounted();
@@ -128,7 +129,7 @@ const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) =>
   const hasActiveFilters = Boolean(tokenTypes?.length);
 
   const tabs = [
-    { id: 'tokens_erc20', title: `WRAPPED BRC-20 or pBRC-20`, component: <ERC20Tokens tokensQuery={ erc20Query }
+    { id: 'tokens_erc20', title: `Tokens`, component: <ERC20Tokens tokensQuery={ erc20Query }
       externalTokensQuery={ externalTokensQuery }/> },
     {
       id: 'tokens_nfts',
@@ -177,7 +178,7 @@ const AddressTokens = ({ shouldRender = true, isQueryEnabled = true }: Props) =>
 
   return (
     <>
-      <TokenBalances/>
+      <TokenBalances count={ count }/>
       { /* should stay before tabs to scroll up with pagination */ }
       <Box ref={ scrollRef }></Box>
       <RoutedTabs

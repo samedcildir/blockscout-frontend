@@ -1,5 +1,4 @@
 import { Flex, HStack, Grid, GridItem } from '@chakra-ui/react';
-import BigNumber from 'bignumber.js';
 import React from 'react';
 
 import type { TokenInfo } from 'types/api/token';
@@ -33,10 +32,7 @@ const TokensTableItem = ({
   const {
     address,
     filecoin_robust_address: filecoinRobustAddress,
-    exchange_rate: exchangeRate,
-    type,
     holders,
-    circulating_market_cap: marketCap,
     origin_chain_id: originalChainId,
   } = token;
 
@@ -61,7 +57,10 @@ const TokensTableItem = ({
             fontWeight="700"
           />
           <Flex ml={ 3 } flexShrink={ 0 } columnGap={ 1 }>
-            <Tag isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
+            <Tag
+              hint={ getHint(token) }
+              isLoading={ isLoading }
+            >{ getTokenTypeName(token) }</Tag>
             { bridgedChainTag && <Tag isLoading={ isLoading }>{ bridgedChainTag }</Tag> }
           </Flex>
           <Skeleton isLoaded={ !isLoading } fontSize="sm" ml="auto" color="text_secondary" minW="24px" textAlign="right" lineHeight={ 6 }>
@@ -69,28 +68,16 @@ const TokensTableItem = ({
           </Skeleton>
         </GridItem>
       </Grid>
-      <Flex justifyContent="space-between" alignItems="center" width="150px" ml={ 7 } mt={ -2 }>
-        <AddressEntity
-          address={{ hash: address, filecoin: { robust: filecoinRobustAddress } }}
-          isLoading={ isLoading }
-          truncation="constant"
-          noIcon
-        />
-        <AddressAddToWallet token={ token } isLoading={ isLoading }/>
-      </Flex>
-      { exchangeRate && (
-        <HStack spacing={ 3 }>
-          <Skeleton isLoaded={ !isLoading } fontSize="sm" fontWeight={ 500 }>Price</Skeleton>
-          <Skeleton isLoaded={ !isLoading } fontSize="sm" color="text_secondary">
-            <span>${ Number(exchangeRate).toLocaleString(undefined, { minimumSignificantDigits: 4 }) }</span>
-          </Skeleton>
-        </HStack>
-      ) }
-      { marketCap && (
-        <HStack spacing={ 3 }>
-          <Skeleton isLoaded={ !isLoading } fontSize="sm" fontWeight={ 500 }>On-chain market cap</Skeleton>
-          <Skeleton isLoaded={ !isLoading } fontSize="sm" color="text_secondary"><span>{ BigNumber(marketCap).toFormat() }</span></Skeleton>
-        </HStack>
+      { address !== '' && (
+        <Flex justifyContent="space-between" alignItems="center" width="150px" ml={ 7 } mt={ -2 }>
+          <AddressEntity
+            address={{ hash: address, filecoin: { robust: filecoinRobustAddress } }}
+            isLoading={ isLoading }
+            truncation="constant"
+            noIcon
+          />
+          <AddressAddToWallet token={ token } isLoading={ isLoading }/>
+        </Flex>
       ) }
       <HStack spacing={ 3 }>
         <Skeleton isLoaded={ !isLoading } fontSize="sm" fontWeight={ 500 }>Holders</Skeleton>
@@ -99,5 +86,15 @@ const TokensTableItem = ({
     </ListItemMobile>
   );
 };
+
+function getHint(token: TokenInfo) {
+  if (token.address === '') {
+    return 'Base BRC20 tokens: Ticker names are unique identifiers.';
+  }
+  if (token.icon_url != null) {
+    return 'Wrapped BRC20 tokens: Ticker names are unique identifiers. These represent base BRC20 tokens inside the programmable module.';
+  }
+  return 'pBRC-20 tokens: Exist only within the programmable module. Contract addresses are unique; ticker names are not unique!';
+}
 
 export default TokensTableItem;

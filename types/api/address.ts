@@ -73,15 +73,16 @@ export interface AddressExternalTokensResponse {
   items: Array<AddressExternalTokenBalance>;
 }
 
+export interface AddressTokensResponseNextPageParams {
+  items_count: number;
+  token_name: string | null;
+  token_type: TokenType;
+  value: number;
+  fiat_value: string | null;
+}
 export interface AddressTokensResponse {
   items: Array<AddressTokenBalance>;
-  next_page_params: {
-    items_count: number;
-    token_name: string | null;
-    token_type: TokenType;
-    value: number;
-    fiat_value: string | null;
-  } | null;
+  next_page_params: AddressTokensResponseNextPageParams | null;
 }
 
 export interface AddressNFTsResponse {

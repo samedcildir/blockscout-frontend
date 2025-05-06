@@ -19,15 +19,14 @@ const ERC20TokensTable = ({ data, top, isLoading }: Props) => {
       <Thead top={ top }>
         <Tr>
           <Th width="30%">Asset</Th>
-          <Th width="25%">Contract address</Th>
-          <Th width="15%">Token Type</Th>
-          <Th width="15%" isNumeric>Quantity</Th>
-          <Th width="15%" isNumeric>Quantity out of BRC2.0</Th>
+          <Th width="30%">Contract address</Th>
+          <Th width="20%">Token Type</Th>
+          <Th width="20%" isNumeric>Balance</Th>
         </Tr>
       </Thead>
       <Tbody>
         { data.map((item, index) => (
-          <ERC20TokensTableItem key={ item.token.address + (isLoading ? index : '') } { ...item } isLoading={ isLoading }/>
+          <ERC20TokensTableItem key={ item.token.address + item.token.name + (isLoading ? index : '') } { ...item } isLoading={ isLoading }/>
         )) }
       </Tbody>
     </Table>

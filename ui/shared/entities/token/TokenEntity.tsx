@@ -18,6 +18,12 @@ type LinkProps = EntityBase.LinkBaseProps & Pick<EntityProps, 'token'>;
 const Link = chakra((props: LinkProps) => {
   const defaultHref = route({ pathname: '/token/[hash]', query: { ...props.query, hash: props.token.address } });
 
+  if (props.token.address === '') {
+    return (
+      props.children
+    );
+  }
+
   return (
     <EntityBase.Link
       { ...props }
@@ -64,7 +70,8 @@ const Content = chakra((props: ContentProps) => {
   const nameString = [
     !props.onlySymbol && (props.token.name ?? 'Unnamed token'),
     props.onlySymbol && (props.token.symbol ?? props.token.name ?? 'Unnamed token'),
-    props.token.symbol && props.jointSymbol && !props.onlySymbol && `(${ props.token.symbol })`,
+    props.token.symbol && props.jointSymbol && !props.onlySymbol &&
+      (props.token.icon_url == null) && (props.token.address !== '') && `(${ props.token.symbol })`,
   ].filter(Boolean).join(' ');
 
   return (

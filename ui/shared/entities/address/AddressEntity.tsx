@@ -6,7 +6,7 @@ import type { AddressParam } from 'types/api/addressParams';
 
 import { route } from 'nextjs-routes';
 
-import { toBech32Address } from 'lib/address/bech32';
+import { toBech32Address, isBTCAddress, fromBTCAddress } from 'lib/address/bech32';
 import { useAddressHighlightContext } from 'lib/contexts/addressHighlight';
 import { useSettingsContext } from 'lib/contexts/settings';
 import Skeleton from 'ui/shared/chakra/Skeleton';
@@ -24,7 +24,8 @@ const getDisplayedAddress = (address: AddressProp, altHash?: string) => {
 };
 
 const Link = chakra((props: LinkProps) => {
-  const defaultHref = route({ pathname: '/address/[hash]', query: { ...props.query, hash: props.address.hash } });
+  const defaultHref = route({ pathname: '/address/[hash]', query: { ...props.query,
+    hash: isBTCAddress(props.address.hash) ? fromBTCAddress(props.address.hash) : props.address.hash } });
 
   return (
     <EntityBase.Link

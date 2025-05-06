@@ -74,10 +74,10 @@ const TokenSelectMenu = ({ erc20sort, erc1155sort, erc404sort, filteredData, onI
             <Box key={ type }>
               <Flex justifyContent="space-between">
                 <Text mb={ 3 } color="gray.500" fontWeight={ 600 } fontSize="sm">
-                  { type == 'ERC-20' ? 'WRAPPED BRC-20 and pBRC-20' : type } tokens ({ numPrefix }{ tokenInfo.items.length })
+                  { type === 'ERC-20' ? 'WRAPPED BRC20 and pBRC-20' : type } tokens ({ numPrefix }{ tokenInfo.items.length })
                 </Text>
                 { hasSort && (
-                  <Link data-type={ type } onClick={ onSortClick } aria-label={ `Sort ${ type == 'ERC-20' ? 'WRAPPED BRC-20 and pBRC-20' : type } tokens` }>
+                  <Link data-type={ type } onClick={ onSortClick } aria-label={ `Sort ${ type === 'ERC-20' ? 'WRAPPED BRC20 and pBRC-20' : type } tokens` }>
                     <IconSvg name="arrows/east" boxSize={ 5 } transform={ arrowTransform } transitionDuration="faster"/>
                   </Link>
                 ) }

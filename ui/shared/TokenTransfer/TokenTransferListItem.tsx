@@ -61,7 +61,7 @@ const TokenTransferListItem = ({
               <Tag flexShrink={ 0 } isLoading={ isLoading }>{ getTokenTypeName(token) }</Tag>
             </>
           ) }
-          <Tag colorScheme="orange" isLoading={ isLoading }>{ getTokenTransferTypeText(type) }</Tag>
+          <Tag colorScheme="orange" isLoading={ isLoading }>{ getTokenTransferTypeText(type, token) }</Tag>
         </Flex>
         { showTxInfo && txHash && (
           <TxAdditionalInfo hash={ txHash } isMobile isLoading={ isLoading }/>

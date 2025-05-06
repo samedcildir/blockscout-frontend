@@ -21,8 +21,12 @@ export const TOKEN_TYPE_IDS: Array<TokenType> = [ 'ERC-20', ...NFT_TOKEN_TYPE_ID
 export function getTokenTypeName(tokenQueryResult: TokenInfo) {
   const typeId = tokenQueryResult.type;
   const iconUrl = tokenQueryResult.icon_url;
+  const address = tokenQueryResult.address;
+  if (address === '') {
+    return 'BRC20';
+  }
   if (iconUrl != null) {
-    return 'WRAPPED BRC-20';
+    return 'WRAPPED BRC20';
   }
   return TOKEN_TYPES[typeId];
 }

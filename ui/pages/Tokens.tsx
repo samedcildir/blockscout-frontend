@@ -59,6 +59,7 @@ const Tokens = () => {
     filters: tab === 'bridged' ? { q: debouncedSearchTerm, chain_ids: bridgeChains } : { q: debouncedSearchTerm, type: tokenTypes },
     sorting: getSortParamsFromValue<TokensSortingValue, TokensSortingField, TokensSorting['order']>(sort),
     options: {
+      enabled: tab !== 'external_tokens',
       placeholderData: generateListStub<'tokens'>(
         TOKEN_INFO_ERC_20,
         50,
@@ -74,12 +75,37 @@ const Tokens = () => {
     },
   });
 
+  const externalTokensQuery = useQueryWithPages({
+    resourceName: 'external_tokens',
+    filters: { q: debouncedSearchTerm, type: tokenTypes },
+    sorting: getSortParamsFromValue<TokensSortingValue, TokensSortingField, TokensSorting['order']>(sort),
+    options: {
+      enabled: tab === 'external_tokens',
+      placeholderData: generateListStub<'external_tokens'>(
+        TOKEN_INFO_ERC_20,
+        50,
+        {
+          next_page_params: {
+            holder_count: 81528,
+            items_count: 50,
+            name: '',
+            market_cap: null,
+          },
+        },
+      ),
+    },
+  });
+
   const handleSearchTermChange = React.useCallback((value: string) => {
-    tab === 'bridged' ?
-      tokensQuery.onFilterChange({ q: value, chain_ids: bridgeChains }) :
+    if (tab === 'bridged') {
+      tokensQuery.onFilterChange({ q: value, chain_ids: bridgeChains });
+    } else if (tab === 'external_tokens') {
+      externalTokensQuery.onFilterChange({ q: value, type: tokenTypes });
+    } else {
       tokensQuery.onFilterChange({ q: value, type: tokenTypes });
+    }
     setSearchTerm(value);
-  }, [ bridgeChains, tab, tokenTypes, tokensQuery ]);
+  }, [ bridgeChains, tab, tokenTypes, tokensQuery, externalTokensQuery ]);
 
   const handleTokenTypesChange = React.useCallback((value: Array<TokenType>) => {
     tokensQuery.onFilterChange({ q: debouncedSearchTerm, type: value });
@@ -94,7 +120,8 @@ const Tokens = () => {
   const handleSortChange = React.useCallback((value?: TokensSortingValue) => {
     setSort(value);
     tokensQuery.onSortingChange(getSortParamsFromValue(value));
-  }, [ tokensQuery ]);
+    externalTokensQuery.onSortingChange(getSortParamsFromValue(value));
+  }, [ tokensQuery, externalTokensQuery ]);
 
   const handleTabChange = React.useCallback(() => {
     setSearchTerm('');
@@ -103,23 +130,25 @@ const Tokens = () => {
     setBridgeChains(undefined);
   }, []);
 
-  const hasMultipleTabs = bridgedTokensFeature.isEnabled;
+  const hasMultipleTabs = true; //bridgedTokensFeature.isEnabled;
 
-  const filter = tab === 'bridged' ? (
-    <PopoverFilter contentProps={{ maxW: '350px' }} appliedFiltersNum={ bridgeChains?.length }>
-      <TokensBridgedChainsFilter onChange={ handleBridgeChainsChange } defaultValue={ bridgeChains }/>
-    </PopoverFilter>
-  ) : (
-    <PopoverFilter contentProps={{ w: '200px' }} appliedFiltersNum={ tokenTypes?.length }>
-      <TokenTypeFilter<TokenType> onChange={ handleTokenTypesChange } defaultValue={ tokenTypes } nftOnly={ false }/>
-    </PopoverFilter>
-  );
+  const filter =
+    tab === 'bridged' ? (
+      <PopoverFilter contentProps={{ maxW: '350px' }} appliedFiltersNum={ bridgeChains?.length }>
+        <TokensBridgedChainsFilter onChange={ handleBridgeChainsChange } defaultValue={ bridgeChains }/>
+      </PopoverFilter>
+    ) : (
+      <PopoverFilter contentProps={{ w: '200px' }} appliedFiltersNum={ tokenTypes?.length }>
+        <TokenTypeFilter<TokenType> onChange={ handleTokenTypesChange } defaultValue={ tokenTypes } nftOnly={ false }/>
+      </PopoverFilter>
+    );
 
   const actionBar = (
     <TokensActionBar
       key={ tab }
-      pagination={ tokensQuery.pagination }
-      filter={ filter }
+      pagination={ tab === 'external_tokens' ? externalTokensQuery.pagination :
+        tokensQuery.pagination }
+      filter={ tab === 'external_tokens' ? '' : filter }
       searchTerm={ searchTerm }
       onSearchChange={ handleSearchTermChange }
       sort={ sort }
@@ -147,10 +176,24 @@ const Tokens = () => {
   const tabs: Array<RoutedTab> = [
     {
       id: 'all',
-      title: 'All',
+      title: 'BRC 2.0',
       component: (
         <TokensList
           query={ tokensQuery }
+          sort={ sort }
+          onSortChange={ handleSortChange }
+          actionBar={ isMobile ? actionBar : null }
+          hasActiveFilters={ Boolean(searchTerm || tokenTypes) }
+          tableTop={ hasMultipleTabs ? TABS_HEIGHT : undefined }
+        />
+      ),
+    },
+    {
+      id: 'external_tokens',
+      title: 'BRC 20',
+      component: (
+        <TokensList
+          query={ externalTokensQuery }
           sort={ sort }
           onSortChange={ handleSortChange }
           actionBar={ isMobile ? actionBar : null }

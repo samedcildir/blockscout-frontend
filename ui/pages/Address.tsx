@@ -84,6 +84,14 @@ const AddressPageContent = () => {
     },
   });
 
+  const btcAddressTabsCountersQuery = useApiQuery('btc_address_tabs_counters', {
+    pathParams: { hash },
+    queryOptions: {
+      enabled: areQueriesEnabled && Boolean(hash),
+      placeholderData: ADDRESS_TABS_COUNTERS,
+    },
+  });
+
   const userOpsAccountQuery = useApiQuery('user_ops_account', {
     pathParams: { hash },
     queryOptions: {
@@ -125,6 +133,7 @@ const AddressPageContent = () => {
   const isTabsLoading =
     isLoading ||
     addressTabsCountersQuery.isPlaceholderData ||
+    btcAddressTabsCountersQuery.isPlaceholderData ||
     (config.features.userOps.isEnabled && userOpsAccountQuery.isPlaceholderData) ||
     (config.features.mudFramework.isEnabled && mudTablesCountQuery.isPlaceholderData);
 
@@ -152,6 +161,15 @@ const AddressPageContent = () => {
     config.features.mudFramework.isEnabled ? (mudTablesCountQuery.isPlaceholderData || addressQuery.isPlaceholderData) : addressQuery.isPlaceholderData,
     Boolean(config.features.mudFramework.isEnabled && mudTablesCountQuery.data && mudTablesCountQuery.data > 0),
   );
+
+  const tokenTransfersCount = addressTabsCountersQuery.data?.token_transfers_count == null ||
+                          btcAddressTabsCountersQuery.data?.token_transfers_count == null ? null :
+    addressTabsCountersQuery.data.token_transfers_count +
+                              btcAddressTabsCountersQuery.data.token_transfers_count;
+  const tokenBalancesCount = addressTabsCountersQuery.data?.token_balances_count == null ||
+                          btcAddressTabsCountersQuery.data?.token_balances_count == null ? null :
+    addressTabsCountersQuery.data.token_balances_count +
+                              btcAddressTabsCountersQuery.data.token_balances_count;
 
   const tabs: Array<RoutedTab> = React.useMemo(() => {
     return [
@@ -225,14 +243,14 @@ const AddressPageContent = () => {
       {
         id: 'token_transfers',
         title: 'Token transfers',
-        count: addressTabsCountersQuery.data?.token_transfers_count,
+        count: tokenTransfersCount,
         component: <AddressTokenTransfers shouldRender={ !isTabsLoading } isQueryEnabled={ areQueriesEnabled }/>,
       },
       {
         id: 'tokens',
         title: 'Tokens',
-        count: addressTabsCountersQuery.data?.token_balances_count,
-        component: <AddressTokens shouldRender={ !isTabsLoading } isQueryEnabled={ areQueriesEnabled }/>,
+        count: tokenBalancesCount,
+        component: <AddressTokens count={ tokenBalancesCount } shouldRender={ !isTabsLoading } isQueryEnabled={ areQueriesEnabled }/>,
         subTabs: TOKEN_TABS,
       },
       {
@@ -274,6 +292,8 @@ const AddressPageContent = () => {
     isTabsLoading,
     areQueriesEnabled,
     mudTablesCountQuery.data,
+    tokenBalancesCount,
+    tokenTransfersCount,
   ]);
 
   const usernameApiTag = userPropfileApiQuery.data?.user_profile?.username;

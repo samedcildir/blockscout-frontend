@@ -63,7 +63,7 @@ const TokensTable = ({ items, page, isLoading, sorting, setSorting, top }: Props
       </Thead>
       <Tbody>
         { items.map((item, index) => (
-          <TokensTableItem key={ item.address + (isLoading ? index : '') } token={ item } index={ index } page={ page } isLoading={ isLoading }/>
+          <TokensTableItem key={ item.address + item.name + (isLoading ? (index) : '') } token={ item } index={ index } page={ page } isLoading={ isLoading }/>
         )) }
       </Tbody>
     </Table>

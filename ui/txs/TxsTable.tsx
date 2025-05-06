@@ -55,9 +55,9 @@ const TxsTable = ({
             <Th width="54px"></Th>
             <Th width="180px">Txn hash</Th>
             <Th width="160px">Type</Th>
-            <Th width="20%">Method</Th>
+            <Th width="25%">Method</Th>
             { showBlockInfo && (
-              <Th width="18%">
+              <Th width="23%">
                 <Link onClick={ isLoading ? undefined : sort('block_number') } display="flex" alignItems="center">
                   { sorting === 'block_number-asc' && <IconSvg boxSize={ 5 } name="arrows/east" transform="rotate(-90deg)"/> }
                   { sorting === 'block_number-desc' && <IconSvg boxSize={ 5 } name="arrows/east" transform="rotate(90deg)"/> }
@@ -65,9 +65,9 @@ const TxsTable = ({
                 </Link>
               </Th>
             ) }
-            <Th width="224px">From/To</Th>
+            <Th width="30%">From/To</Th>
             { !config.UI.views.tx.hiddenFields?.value && (
-              <Th width="20%" isNumeric>
+              <Th width="30%" isNumeric>
                 <Link onClick={ isLoading ? undefined : sort('value') } display="flex" alignItems="center" justifyContent="end">
                   { sorting === 'value-asc' && <IconSvg boxSize={ 5 } name="arrows/east" transform="rotate(-90deg)"/> }
                   { sorting === 'value-desc' && <IconSvg boxSize={ 5 } name="arrows/east" transform="rotate(90deg)"/> }
