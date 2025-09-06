@@ -5,7 +5,7 @@ import { getEnvValue } from '../utils';
 
 const walletConnectProjectId = getEnvValue('NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID');
 
-const title = 'Blockchain interaction (writing to contract, etc.)';
+const title = 'BRC2.0 interaction (writing to contract, etc.)';
 
 const config: Feature<{ walletConnect: { projectId: string } }> = (() => {
 

@@ -13,7 +13,7 @@ export default function createGoogleCalendarLink({ timeFromNow, blockHeight }: P
 
   const date = dayjs().add(timeFromNow, 's');
   const name = `Block #${ blockHeight } reminder | ${ config.chain.name }`;
-  const description = `#${ blockHeight } block creation time on ${ config.chain.name } blockchain.`;
+  const description = `#${ blockHeight } block creation time on ${ config.chain.name }.`;
   const startTime = date.format(DATE_FORMAT);
   const endTime = date.add(15, 'minutes').format(DATE_FORMAT);
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
