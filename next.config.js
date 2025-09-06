@@ -12,7 +12,6 @@ const rewrites = require('./nextjs/rewrites');
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
-  basePath: '/signet',
   transpilePackages: [
     'react-syntax-highlighter',
     'swagger-client',
