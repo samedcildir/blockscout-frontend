@@ -8,13 +8,13 @@ export const base: stats.MainPageStats = {
     value: '14.909090909090908',
     title: 'Average block time',
     units: 's',
-    description: 'Average time taken in seconds for a block to be included in the blockchain',
+    description: 'Average time taken in seconds for a block to be included in BRC2.0',
   },
   total_addresses: {
     id: 'totalAddresses',
     value: '113606435',
     title: 'Total addresses',
-    description: 'Number of addresses that participated in the blockchain',
+    description: 'Number of addresses that participated in BRC2.0',
   },
   total_blocks: {
     id: 'totalBlocks',

@@ -56,7 +56,7 @@ test('submenu', async({ render, page }) => {
   const component = await render(<Burger/>, { hooksConfig });
 
   await component.locator('div[aria-label="Menu button"]').click();
-  await page.locator('div[aria-label="Blockchain link group"]').click();
+  await page.locator('div[aria-label="BRC2.0 link group"]').click();
   await expect(page).toHaveScreenshot();
 });
 

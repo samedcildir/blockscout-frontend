@@ -117,7 +117,7 @@ test.describe('with submenu', () => {
       </Flex>,
       { hooksConfig },
     );
-    await page.locator('div[aria-label="Blockchain link group"]').hover();
+    await page.locator('div[aria-label="BRC2.0 link group"]').hover();
   });
 
   test('base view', async() => {
@@ -240,7 +240,7 @@ test.describe('with highlighted routes', () => {
   });
 
   test('with submenu', async({ page }) => {
-    await page.locator('div[aria-label="Blockchain link group"]').hover();
+    await page.locator('div[aria-label="BRC2.0 link group"]').hover();
     await expect(component).toHaveScreenshot();
   });
 
