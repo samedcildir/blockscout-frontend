@@ -54,8 +54,18 @@ export function fromBech32Address(hash: string) {
 }
 
 export function isBTCAddress(hash: string) {
+  let pkscript = null;
   try {
-    const pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.bitcoin).toString('hex');
+  } catch (error) {
+    try {
+      pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    } catch (error) {
+      return false;
+    }
+  }
+
+  try {
     const pkscriptBuf = Buffer.from(pkscript, 'hex');
     const pkscriptHash = keccak256(pkscriptBuf);
     pkscriptHash.slice(-40);
@@ -65,8 +75,18 @@ export function isBTCAddress(hash: string) {
   }
 }
 export function fromBTCAddress(hash: string) {
+  let pkscript = null;
   try {
-    const pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.bitcoin).toString('hex');
+  } catch (error) {
+    try {
+      pkscript = bitcoin.address.toOutputScript(hash, bitcoin.networks.testnet).toString('hex');
+    } catch (error) {
+      return hash;
+    }
+  }
+
+  try {
     const pkscriptBuf = Buffer.from(pkscript, 'hex');
     const pkscriptHash = keccak256(pkscriptBuf);
     const addr = pkscriptHash.slice(-40);
