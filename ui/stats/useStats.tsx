@@ -29,6 +29,7 @@ const hiddenCharts = [
   'block size',
   'gas limit',
   'gas price',
+  'eth transfers',
 ];
 function isHiddenChart(chart: stats.LineChartInfo) {
   const title = chart.title.toLowerCase();
